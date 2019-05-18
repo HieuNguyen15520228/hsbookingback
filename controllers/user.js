@@ -141,17 +141,43 @@ exports.register = (req, res) => {
       if (foundUser) {
         return res.status(422).send({ errors: { status: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' }});
       }
+      const registerToken = crypto.randomBytes(20);
       const user = new User({
         username,
         email,
         password,
-
+        registerToken
       });
       user.save((err) => {
         if (err) {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
+        var smtpTransport = nodemailer.createTransport(/*'SMTP',*/ {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          type: 'OAuth2',
+          user: '15520579@gm.uit.edu.vn',
+          clientId: '1084231637210-5s064d297c3enbsfhshjdiq74pjdab7a.apps.googleusercontent.com',
+          clientSecret: 'N_UDvg3p_N3B8A2tO8eCinLa',
+          refreshToken: '1/hYs8fnGIEHiBXMzz9m-VC5CWwAfsGQJb1q5yRTClkao',
+          accessToken: 'ya29.Gls7BrzkosyRcDTkCShI7GRG8hQ7aifSM4Cyr9W-BC8vehOrHI5vDW6hhzU-IPPa-uQMgZWq2urxJFnHlJE-01EA4ZNax6seEa_KLdY8xE7IMRBtMybk1PQ-uOUc'
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'registerconfirm@uitbooking.demo.com',
+        subject: 'Account Verification Token',
+        text: 'Please verify your account by clicking the link:\n\n' +
+          req.headers.host+"/confirm/" + registerToken + '\n\n'       
+      };
+      smtpTransport.sendMail(mailOptions, (err) => {
+        if (err) 
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
         return res.status(200).send({ result: { status: 'OK', detail:"Đăng ký thành công"}});
+      });
+        
       })
     })
   }

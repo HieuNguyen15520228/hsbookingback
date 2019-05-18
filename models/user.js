@@ -1,0 +1,76 @@
+const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema
+const userSchema = new Schema({
+  username: {
+    type: String,
+    min: [4, 'Yêu cầu nhập nhiều hơn 4 ký tự'],
+    max: [32, 'Yêu cầu tối đa 32 ký tự']
+  },
+  email: {
+    type: String,
+    min: [4, 'Yêu cầu nhập nhiều hơn 4 ký tự'],
+    max: [32, 'Yêu cầu tối đa 32 ký tự'],
+    unique: true,
+    lowercase: true,
+    required: 'Yêu cầu email',
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
+  },
+  password: {
+    type: String,
+    min: [4, 'Yêu cầu nhập nhiều hơn 4 ký tự'],
+    max: [32, 'Yêu cầu tối đa 32 ký tự'],
+    required: 'Yêu cầu mật khẩu'
+  },
+  phone: {
+    type: String,
+    default: ''
+    // min: [9, 'Yêu cầu ít nhất 9 số' ],
+    // max: [10, 'Yêu cầu tối đa 10 số'],
+    // required: true 
+  },
+  fullname : {
+    type: String,
+    default: ''
+  },
+  dateOfBirth: {
+    type: Date,
+    default: Date.now
+    // required: true
+  },
+
+  gender : {type: String, default: undefined},
+  address: {type: String, default:''},
+  description: {type: String, default:''},
+  createdAt: { type: Date, default: Date.now },
+  // stripeCustomerId: String,
+  resetPasswordToken: { type: String, default:undefined},
+  resetPasswordExpires: { type: String, default:undefined},
+  image: { type: String, default: 'https://res.cloudinary.com/hsuit/image/upload/q_auto:low/v1553620808/default.png'},
+  oldImages : [String],
+  revenue: Number,
+  rentals: [{type: Schema.Types.ObjectId, ref: 'Rental'}],
+  bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
+  message: {type: String, default:''},
+  identityCard: {type: String, default:''},
+  searchHistory: [String]
+});
+
+userSchema.methods.hasSamePassword = function(requestedPassword) {
+
+  return bcrypt.compareSync(requestedPassword, this.password);
+}
+
+
+userSchema.pre('save', function(next) {
+  const user = this;
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(user.password, salt, function(err, hash)  {
+        user.password = hash;
+        next();
+    });
+  });
+});
+
+module.exports = mongoose.model('User', userSchema );
+

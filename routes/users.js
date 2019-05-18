@@ -11,7 +11,7 @@ const multerUpload = require('../services/multerUpload')
 router.post('/forgotpass', User.sendMailToken);
 
 router.get('/info/:id', User.authMiddleware, User.getUser);
-router.get('/confirm/:id', User.confirmation
+router.get('/confirm/:id', User.confirmation);
 router.post('/login', User.auth);
 
 router.post('/register', User.register);

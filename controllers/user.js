@@ -348,12 +348,12 @@ exports.updateInfo = (req, res) => {
 }
 
 exports.confirmation = (req,res) =>{
-  console.log(req.query);
-  User.findOneAndUpdate({ registerToken: req.query.id }, {isVerified: true}, { new: true }, (err, user)=>{
+  console.log(req.params.id);
+  User.findOneAndUpdate({ registerToken: req.params.id }, {isVerified: true, registerToken: undefined}, { new: true }, (err, user)=>{
     if(err)
-          return res.status(422).send({ errors: normalizeErrors(err.errors) });      
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });    
     if(!user)
-      return res.status(404).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
+      return res.status(404).send({ errors:{ status: 'Error', detail: 'Token không hợp lệ hoặc tài khoản đã được xác nhận' }});
     return res.status(200).send({result :{status:"OK",detail:"Đã xác nhận tài khoản thành công"}})
   })
 }

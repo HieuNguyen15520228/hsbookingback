@@ -64,12 +64,14 @@ userSchema.methods.hasSamePassword = function(requestedPassword) {
 
 userSchema.pre('save', function(next) {
   const user = this;
+  if(user.password.length < 15){
   bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(user.password, salt, function(err, hash)  {
         user.password = hash;
         next();
     });
   });
+  }
 });
 
 module.exports = mongoose.model('User', userSchema );

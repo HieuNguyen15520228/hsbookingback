@@ -53,6 +53,8 @@ const userSchema = new Schema({
   bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
   message: {type: String, default:''},
   identityCard: {type: String, default:''},
+  isVerified: { type: Boolean, default: false },
+  registerToken : {type: String, default: undefined},
   searchHistory: [String]
 });
 

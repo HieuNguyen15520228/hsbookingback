@@ -91,7 +91,7 @@ exports.auth = (req, res) => {
   const { email, password } = req.body;
 
   if (!password || !email) {
-    return res.status(422).send({ errors: [{ title: 'Data missing!', detail: 'Provide email and password!' }] });
+    return res.status(422).send({ title: 'Data missing!', detail: 'Provide email and password!' });
   }
 
   User.findOne({ email }, (err, user) => {

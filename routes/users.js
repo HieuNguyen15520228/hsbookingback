@@ -10,8 +10,8 @@ const multerUpload = require('../services/multerUpload')
 // const multerUploads = multer({ storage }).single('image');
 router.post('/forgotpass', User.sendMailToken);
 
-router.get('/:id', User.authMiddleware, User.getUser);
-
+router.get('/info/:id', User.authMiddleware, User.getUser);
+router.get('/confirm/:id', User.confirmation
 router.post('/login', User.auth);
 
 router.post('/register', User.register);

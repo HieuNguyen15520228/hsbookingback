@@ -26,8 +26,8 @@ exports.getUser = (req, res) => {
         return res.json(foundUser);
       })
   }
-  else
-    return res.status(422).send({ errors: normalizeErrors(err.errors) });
+  // else
+  //   return res.status(422).send({ errors: normalizeErrors(err.errors) });
 }
 
 exports.changeAvatar = (req, res) => {
@@ -101,8 +101,8 @@ exports.auth = (req, res) => {
     if (!user) {
       return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
     }
-    if(!user.isAccepted)
-     return res.status(404).send({ errors: { status: 'Error', detail: 'Tài khoản chưa xác thực' } });
+    if(!user.isVerified)
+     return res.status(401).send({ errors: { status: 'Error', detail: 'Tài khoản chưa xác thực' } });
     if (user.hasSamePassword(password)) {
       const token = jwt.sign({
         userId: user.id,
@@ -347,6 +347,8 @@ exports.updateInfo = (req, res) => {
   })
 }
 
+exports.confirmation = (req,res) =>{
+Rental.findByIdAndUpdate({ _id: req.body._id }, data, { new: true }, (err, renta}
 exports.addSearchHistory = (req, res) => {
   const key = req.body.key
   const user = res.locals.user;  const _id = user.id

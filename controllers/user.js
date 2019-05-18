@@ -348,7 +348,15 @@ exports.updateInfo = (req, res) => {
 }
 
 exports.confirmation = (req,res) =>{
-Rental.findByIdAndUpdate({ _id: req.body._id }, data, { new: true }, (err, renta}
+  console.log(req.query);
+  User.findOneAndUpdate({ registerToken: req.query.id }, {isVerified: true}, { new: true }, (err, user)=>{
+    if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });      
+    if(!user)
+      return res.status(404).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
+    return res.status(200).send({result :{status:"OK",detail:"Đã xác nhận tài khoản thành công"}})
+  })
+}
 exports.addSearchHistory = (req, res) => {
   const key = req.body.key
   const user = res.locals.user;  const _id = user.id
@@ -364,8 +372,8 @@ exports.addSearchHistory = (req, res) => {
   User.findByIdAndUpdate({_id}, {searchHistory},{ new: true }, (err,user)=>{
     if(err)
     return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(user)
-      return res.json(user)
+    if(!user)
+      return res.status(422).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
   })
 
 }

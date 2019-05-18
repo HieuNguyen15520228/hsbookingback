@@ -120,22 +120,19 @@ exports.auth = (req, res) => {
 
 exports.register = (req, res) => {
   const { username, email, password, passwordConfirmation } = req.body;
-
   if (!password || !email) {
     return res.status(422).send({ errors: { title: 'Dữ liệu trống!', detail: 'Điền đầy đủ thông tin!' } });
   }
-
   if (password !== passwordConfirmation) {
     return res.status(422).send({ errors: { title: 'Mật khẩu không hợp lệ!', detail: 'Mật khẩu xác nhận không hợp lệ!' }});
   }
-
   User.findOne({ email }, (err, existingUser) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
 
     if (existingUser) {
-      return res.status(422).send({ errors: { title: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tài!' }});
+      return res.status(422).send({ errors: { title: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tại!' }});
     }
     User.findOne({ username }, (err, foundUser) => {
       if (err) {
@@ -143,7 +140,7 @@ exports.register = (req, res) => {
       }
 
       if (foundUser) {
-        return res.status(422).send({ errors: { title: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tài!' }});
+        return res.status(422).send({ errors: { title: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' }});
       }
       const user = new User({
         username,
@@ -151,12 +148,11 @@ exports.register = (req, res) => {
         password,
 
       });
-
       user.save((err) => {
         if (err) {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
-        return res.json({ 'registered': true });
+        return res.status(200).send({ result: { status: 200, detail:""}});
       })
     })
   }

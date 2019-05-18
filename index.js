@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 });
 
 app.use('*', cloudinaryConfig);
-
+app.use('/', (req,res) => res.status(200).json('OK'))
 app.use('/api/v1/rentals', rentalRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/bookings', bookingRoutes);

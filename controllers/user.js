@@ -98,9 +98,8 @@ exports.auth = (req, res) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
-
     if (!user) {
-      return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
+      return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
     }
 
     if (user.hasSamePassword(password)) {
@@ -113,7 +112,7 @@ exports.auth = (req, res) => {
 
       return res.json(token);
     } else {
-      return res.status(422).send({ errors: [{ title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' }] });
+      return res.status(400).send({ errors: { title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' }});
     }
   });
 }
@@ -123,11 +122,11 @@ exports.register = (req, res) => {
   const { username, email, password, passwordConfirmation } = req.body;
 
   if (!password || !email) {
-    return res.status(422).send({ errors: [{ title: 'Dữ liệu trống!', detail: 'Điền đầy đủ thông tin!' }] });
+    return res.status(422).send({ errors: { title: 'Dữ liệu trống!', detail: 'Điền đầy đủ thông tin!' } });
   }
 
   if (password !== passwordConfirmation) {
-    return res.status(422).send({ errors: [{ title: 'Mật khẩu không hợp lệ!', detail: 'Mật khẩu xác nhận không hợp lệ!' }] });
+    return res.status(422).send({ errors: { title: 'Mật khẩu không hợp lệ!', detail: 'Mật khẩu xác nhận không hợp lệ!' }});
   }
 
   User.findOne({ email }, (err, existingUser) => {
@@ -136,7 +135,7 @@ exports.register = (req, res) => {
     }
 
     if (existingUser) {
-      return res.status(422).send({ errors: [{ title: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tài!' }] });
+      return res.status(422).send({ errors: { title: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tài!' }});
     }
     User.findOne({ username }, (err, foundUser) => {
       if (err) {
@@ -144,7 +143,7 @@ exports.register = (req, res) => {
       }
 
       if (foundUser) {
-        return res.status(422).send({ errors: [{ title: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tài!' }] });
+        return res.status(422).send({ errors: { title: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tài!' }});
       }
       const user = new User({
         username,

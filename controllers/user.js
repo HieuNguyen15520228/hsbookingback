@@ -101,7 +101,8 @@ exports.auth = (req, res) => {
     if (!user) {
       return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
     }
-
+    if(!user.isAccepted)
+     return res.status(404).send({ errors: { status: 'Error', detail: 'Tài khoản chưa xác thực' } });
     if (user.hasSamePassword(password)) {
       const token = jwt.sign({
         userId: user.id,
@@ -141,7 +142,8 @@ exports.register = (req, res) => {
       if (foundUser) {
         return res.status(422).send({ errors: { status: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' }});
       }
-      const registerToken = crypto.randomBytes(20);
+      const registerToken = crypto.randomBytes(20).toString('hex');
+      console.log(registerToken)
       const user = new User({
         username,
         email,
@@ -170,7 +172,7 @@ exports.register = (req, res) => {
         from: 'registerconfirm@uitbooking.demo.com',
         subject: 'Account Verification Token',
         text: 'Please verify your account by clicking the link:\n\n' +
-          req.headers.host+"/confirm/" + registerToken + '\n\n'       
+          "localhost:3000/confirm/" + registerToken + '\n\n'       
       };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) 

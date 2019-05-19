@@ -315,7 +315,24 @@ exports.authMiddleware = (req, res, next) => {
     return notAuthorized(res);
   }
 }
+exports.authOrNot = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (token) {
+    const user = parseToken(token);
 
+    User.findById(user.userId, (err, user) => {
+      if (err) {
+        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+      }
+
+      if (user) {
+        res.locals.user = user;
+        next();
+      }
+    })
+  }
+  else next()
+}
 function parseToken(token) {
   return jwt.verify(token.split(' ')[1], config.SECRET);
 }
@@ -356,23 +373,23 @@ exports.confirmation = (req,res) =>{
     return res.status(200).send({result :{status:"OK",detail:"Đã xác nhận tài khoản thành công"}})
   })
 }
-exports.addSearchHistory = (req, res) => {
-  const key = req.body.key
-  const user = res.locals.user;  const _id = user.id
+// exports.addSearchHistory = (req, res) => {
+//   const key = req.body.key
+//   const user = res.locals.user;  const _id = user.id
 
-  const searchHistory = user.searchHistory;
-  for (var i = 0; i < searchHistory.length; i++) {
-    if (searchHistory[i] === key) {
-      searchHistory.splice(i, 1);
-    }
-  }
-  if(key!=null)
-    searchHistory.unshift(key)
-  User.findByIdAndUpdate({_id}, {searchHistory},{ new: true }, (err,user)=>{
-    if(err)
-    return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(!user)
-      return res.status(422).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
-  })
+//   const searchHistory = user.searchHistory;
+//   for (var i = 0; i < searchHistory.length; i++) {
+//     if (searchHistory[i] === key) {
+//       searchHistory.splice(i, 1);
+//     }
+//   }
+//   if(key!=null)
+//     searchHistory.unshift(key)
+//   User.findByIdAndUpdate({_id}, {searchHistory},{ new: true }, (err,user)=>{
+//     if(err)
+//     return res.status(422).send({ errors: normalizeErrors(err.errors) });
+//     if(!user)
+//       return res.status(422).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
+//   })
 
-}
+// }

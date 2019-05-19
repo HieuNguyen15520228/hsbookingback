@@ -66,14 +66,14 @@ router.get('/:id', UserCtrl.authOrNot ,(req, res) => {
             if(user){
               const searchHistory = user.searchHistory;
               for (var i = 0; i < searchHistory.length; i++) {
-                if (searchHistory[i] === rentalId) {
+                if (String(searchHistory[i]._id) === rentalId) {
                   searchHistory.splice(i, 1);
                 }
               }
               if(rentalId)
                 searchHistory.unshift(rentalId)
-              console.log(searchHistory)
               user.searchHistory = searchHistory;
+              console.log(searchHistory);
               user.save((err) => {
                 if (err) {
                   return res.status(422).send({ errors: normalizeErrors(err.errors) });

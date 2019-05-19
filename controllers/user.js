@@ -143,7 +143,6 @@ exports.register = (req, res) => {
         return res.status(422).send({ errors: { status: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' }});
       }
       const registerToken = crypto.randomBytes(20).toString('hex');
-      console.log(registerToken)
       const user = new User({
         username,
         email,

@@ -64,20 +64,19 @@ router.get('/:id', UserCtrl.authOrNot ,(req, res) => {
                 return res.status(422).send({ errors: [{ title: 'Rental Error!', detail: 'Could not find Rental!' }] });
             }
             if(user){
-              //   const searchHistory = user.searchHistory;
-//   for (var i = 0; i < searchHistory.length; i++) {
-//     if (searchHistory[i] === key) {
-//       searchHistory.splice(i, 1);
-//     }
-//   }
-//   if(key!=null)
-//     searchHistory.unshift(key)
-//   User.findByIdAndUpdate({_id}, {searchHistory},{ new: true }, (err,user)=>{
-//     if(err)
-//     return res.status(422).send({ errors: normalizeErrors(err.errors) });
-//     if(!user)
-//       return res.status(422).send({ errors:{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }});
-//   })
+              console.log(rentalId)
+              const searchHistory = user.searchHistory;
+              for (let i = 0; i < searchHistory.length; i++) {
+                if (searchHistory[i] === rentalId) {
+                  searchHistory.splice(i, 1);
+                }
+              }
+              if(rentalId)
+                searchHistory.unshift(rentalId)
+              user.save((err) => {
+                if (err) {
+                  return res.status(422).send({ errors: normalizeErrors(err.errors) });
+              }})
             }
             return res.json(foundRental);
         });

@@ -64,15 +64,16 @@ router.get('/:id', UserCtrl.authOrNot ,(req, res) => {
                 return res.status(422).send({ errors: [{ title: 'Rental Error!', detail: 'Could not find Rental!' }] });
             }
             if(user){
-              console.log(rentalId)
               const searchHistory = user.searchHistory;
-              for (let i = 0; i < searchHistory.length; i++) {
+              for (var i = 0; i < searchHistory.length; i++) {
                 if (searchHistory[i] === rentalId) {
                   searchHistory.splice(i, 1);
                 }
               }
               if(rentalId)
                 searchHistory.unshift(rentalId)
+              console.log(searchHistory)
+              user.searchHistory = searchHistory;
               user.save((err) => {
                 if (err) {
                   return res.status(422).send({ errors: normalizeErrors(err.errors) });

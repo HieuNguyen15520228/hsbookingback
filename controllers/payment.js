@@ -33,7 +33,10 @@ exports.createPayment = (req, res) => {
     const user = res.locals.user;
     const { toUser, booking, totalPrice, payerID, paymentID, paymentToken } = req.body;
     const fromUser = user._id;
-    Booking.findByIdAndUpdate({ _id: booking }, { status: 'paid' }, (err, foundBooking) => {
+    Booking.findByIdAndUpdate({ _id: booking }, { status: 'paid' })
+      .populate('rental')
+      .populate('owner','_id image username message')
+      .exec((err, foundBooking) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (!foundBooking)

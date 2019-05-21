@@ -5,7 +5,9 @@ const config = require('./config');
 const Rental = require('./models/rental');
 const path = require('path');
 const dotenv = require('dotenv');
-const cloudinary = require('cloudinary')
+const cloudinary = require('cloudinary');
+var ParseServer = require('parse-server').ParseServer;
+
 dotenv.config();
 const cloudinaryConfig = (req, res, next) => {
     cloudinary.config({
@@ -15,6 +17,16 @@ const cloudinaryConfig = (req, res, next) => {
     });
     next();
 }
+var api = new ParseServer({
+  databaseURI: 'mmongodb://nhat123:nhat123@ds147225.mlab.com:47225/rentaluit', // Connection string for your MongoDB database
+  cloud: __dirname + '/config/cloud.js', // Absolute path to your Cloud Code
+  appId: 'uithsbooking',
+  masterKey: 'uit123456', // Keep this key secret!
+  fileKey: 'uit123456',
+  serverURL: 'http://hsbookingbackend.glitch.me/parse' // Don't forget to change to https if needed
+});
+
+// Serve the Parse API on the /parse URL prefix
 const rentalRoutes = require('./routes/rentals'),
       userRoutes = require('./routes/users'),
       bookingRoutes = require('./routes/bookings'),
@@ -55,7 +67,7 @@ app.use((req, res, next) => {
   next();
 });
 app.get('/', (req, res) => res.send('Hello World!') ); 
-
+app.use('/parse', api);
 app.use('*', cloudinaryConfig);
 app.use('/api/v1/rentals', rentalRoutes);
 app.use('/api/v1/users', userRoutes);

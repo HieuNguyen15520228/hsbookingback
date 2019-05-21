@@ -24,18 +24,21 @@ var api = new ParseServer({
   appId: 'uithsbooking',
   masterKey: 'uit123456', // Keep this key secret!
   fileKey: 'uit123456',
-  serverURL: 'http://hsbookingbackend.glitch.me/parse' // Don't forget to change to https if needed
+  serverURL: 'https://hsbookingbackend.glitch.me/parse' // Don't forget to change to https if needed
 });
 var options = { allowInsecureHTTP: false };
+var trustProxy = true;
+
 var dashboard = new ParseDashboard({
   "apps": [
     {
-      "serverURL": "http://hsbookingbackend.glitch.me/parse",
+      "serverURL": "https://hsbookingbackend.glitch.me/parse",
       "appId": "uithsbooking",
       "masterKey": "uit123456",
       "appName": "uithsbooking"
     }
-  ]
+  ],  "trustProxy": 1
+
 });
 // Serve the Parse API on the /parse URL prefix
 const rentalRoutes = require('./routes/rentals'),

@@ -7,6 +7,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const cloudinary = require('cloudinary');
 var ParseServer = require('parse-server').ParseServer;
+var ParseDashboard = require('parse-dashboard');
 
 dotenv.config();
 const cloudinaryConfig = (req, res, next) => {
@@ -25,7 +26,17 @@ var api = new ParseServer({
   fileKey: 'uit123456',
   serverURL: 'http://hsbookingbackend.glitch.me/parse' // Don't forget to change to https if needed
 });
-
+var options = { allowInsecureHTTP: false };
+var dashboard = new ParseDashboard({
+  "apps": [
+    {
+      "serverURL": "http://hsbookingbackend.glitch.me/parse",
+      "appId": "uithsbooking",
+      "masterKey": "uit123456",
+      "appName": "uithsbooking"
+    }
+  ]
+});
 // Serve the Parse API on the /parse URL prefix
 const rentalRoutes = require('./routes/rentals'),
       userRoutes = require('./routes/users'),
@@ -67,6 +78,7 @@ app.use((req, res, next) => {
   next();
 });
 app.get('/', (req, res) => res.send('Hello World!') ); 
+app.use('/dashboard', dashboard);
 app.use('/parse', api);
 app.use('*', cloudinaryConfig);
 app.use('/api/v1/rentals', rentalRoutes);

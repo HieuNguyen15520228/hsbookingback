@@ -141,26 +141,26 @@ exports.getBookingsById = (req, res) => {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
       }
       if (!foundBookings)
-        return res.status(422).send({ errors: [{ title: 'Invalid Booking!', detail: 'Hóa đơn không tồn tại!' }] });
+        return res.status(422).send({ errors: { title: 'Invalid Booking!', detail: 'Hóa đơn không tồn tại!' }});
       if (foundBookings) {
         console.log(foundBookings);
         return res.json(foundBookings);
       }
     });
 }
-exports.getOldBookings = (req, res) => {
-  const user = res.locals.user;
-  Booking
-    .where({ user })
-    .where(+moment(endAt) < +moment())
-    .populate('rental')
-    .exec(function (err, foundBookings) {
-      if (err) {
-        return res.status(422).send({ errors: normalizeErrors(err.errors) });
-      }
-      return res.json(foundBookings);
-    });
-}
+// exports.getOldBookings = (req, res) => {
+//   const user = res.locals.user;
+//   Booking
+//     .where({ user })
+//     .where(+moment(endAt) < +moment())
+//     .populate('rental')
+//     .exec(function (err, foundBookings) {
+//       if (err) {
+//         return res.status(422).send({ errors: normalizeErrors(err.errors) });
+//       }
+//       return res.json(foundBookings);
+//     });
+// }
 function isValidBooking(proposedBooking, rental) {
   let isValid = true;
 

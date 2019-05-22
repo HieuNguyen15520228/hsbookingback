@@ -40,7 +40,7 @@ exports.createPayment = (req, res) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (!foundBooking)
-            return res.status(403).send({ errors: [{ title: 'Không tìm thấy', detail: 'Đặt phòng không tồn tại!' }] });
+            return res.status(403).send({ errors: { title: 'Không tìm thấy', detail: 'Đặt phòng không tồn tại!' } });
         if (foundBooking) {
             const payment = new Payment({ fromUser, toUser, booking, totalPrice, payerID, paymentID, paymentToken })
             Payment.create(payment, (err, newPayment) => {

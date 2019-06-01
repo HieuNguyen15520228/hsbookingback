@@ -1,5 +1,7 @@
 const Payment = require('../models/payment');
 const Booking = require('../models/booking');
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
 
 const Rental = require('../models/rental');
 const User = require('../models/user');
@@ -18,7 +20,10 @@ exports.postComment = (req,res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmt)
     {
-      Comment.aggregate([{$match: {"rental":"5ccc7340dfd8d334dcd009f3"}}]).exec((err,cmt)=>console.log(cmt));
+      Comment
+        .aggregate([{$match: {rental:ObjectId('5ccc7340dfd8d334dcd009f3')}},{
+          $group: {_id: "result",avgRating: {$avg: "$rating"}}}])
+        .exec((err,result) => Rental.findByIdAndUpdate(rental,{rating:result.rating}));
       return res.status(200).json(cmt);
     }
   })

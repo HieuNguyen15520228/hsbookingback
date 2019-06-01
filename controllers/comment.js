@@ -34,6 +34,7 @@ exports.getComment = (req,res) =>{
   const rentalId = req.body.rentalId;
   console.log(req.body)
   Comment.find({rental:rentalId})
+  .populate('user','username image _id')
   .skip(limit*(page - 1))
   .limit(limit)
   .exec((err, comment)=>{

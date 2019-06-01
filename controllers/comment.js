@@ -17,6 +17,14 @@ exports.postComment = (req,res) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmt)
-      
+      return res.status(200).json(cmt);
+  })
+}
+exports.getComment = (req,res) =>{
+  const limit = req.body.limit;
+  const page = req.body.page;
+  const rentalId = req.body.rentalId;
+  Comment.find({rental:rentalId},(err,comment)=>{
+    
   })
 }

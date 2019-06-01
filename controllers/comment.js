@@ -18,9 +18,8 @@ exports.postComment = (req,res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmt)
     {
-      Rental.aggregate({$match: {rental}}, 
-      {$group: {_id:null, rating: {$sum:1}}}, function(err, orders) {
-      console.log()
+      Comment.aggregate([{$match: {rental:rental}}], function(err, comment) {
+      console.log(comment)
       });
       return res.status(200).json(cmt);
     }

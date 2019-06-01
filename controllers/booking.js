@@ -25,7 +25,6 @@ exports.createBooking = (req, res) => {
     .populate('bookings')
     .populate('user')
     .exec(async function (err, foundRental) {
-      console.log(foundRental.user)
       const user = res.locals.user;
       if (err) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });

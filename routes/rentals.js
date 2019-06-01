@@ -221,7 +221,6 @@ router.get('', function (req, res) {
 });
 router.post('/update/:id', UserCtrl.authMiddleware, multerUpload.multerUploads2, function (req, res) {
     const user = res.locals.user
-    console.log(req.body.user)
     Rental.findById(req.params.id, (err, foundRental) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });

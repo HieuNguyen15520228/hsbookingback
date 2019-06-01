@@ -8,7 +8,7 @@ const Comment = require('../models/comment')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.postComment = (req,res) => {
-  const user = res.locals.user;
+  const user = res.locals.user._id;
   const rental = req.body.rentalId;
   const comment = req.body.comment;
   const rating = req.body.rating;
@@ -24,7 +24,11 @@ exports.getComment = (req,res) =>{
   const limit = req.body.limit;
   const page = req.body.page;
   const rentalId = req.body.rentalId;
-  Comment.find({rental:rentalId},(err,comment)=>{
-    
+  Comment.find({rental:rentalId})
+  .slice(limit*(page - 1), limit)
+  .exec((err, comment)=>{
+    if(err)
+            return res.status(422).send({ errors: normalizeErrors(err.errors) });
+      
   })
 }

@@ -32,6 +32,7 @@ exports.getComment = (req,res) =>{
   const limit = req.body.limit;
   const page = req.body.page;
   const rentalId = req.body.rentalId;
+  console.log(req.body)
   Comment.find({rental:rentalId})
   .skip(limit*(page - 1))
   .limit(limit)

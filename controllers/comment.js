@@ -24,11 +24,11 @@ exports.getComment = (req,res) =>{
   const limit = req.body.limit;
   const page = req.body.page;
   const rentalId = req.body.rentalId;
-  Comment.find({rental:rentalId})
-  .slice(limit*(page - 1), limit)
+  Comment.find({rental:rentalId}, { comments: {$slice: [ limit*(page - 1), limit ] } })
   .exec((err, comment)=>{
     if(err)
-            return res.status(422).send({ errors: normalizeErrors(err.errors) });
-      
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(comment)
+      return res.status(200).json(comment);
   })
 }

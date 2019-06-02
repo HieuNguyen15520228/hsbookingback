@@ -27,8 +27,8 @@ router.get('/search/top', (req, res) => {
     Rental
         .find({})
         .sort({ rating: -1 })
-        .limit(25)
-        .select('id image title address rating price')
+        .limit(15)
+        .select('_id image title address rating price')
         .exec(function (err, foundRental) {
             if (err) {
                 return res.status(422).send({ errors: normalizeErrors(err.errors) });

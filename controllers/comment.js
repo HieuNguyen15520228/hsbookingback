@@ -21,13 +21,16 @@ exports.postComment = (req,res) => {
     if(cmt)
     {
       Comment
-        .aggregate([{$match: {rental:ObjectId('5ccc7340dfd8d334dcd009f3')}},{
-          $group: {_id: rental,avgRating: {$avg: "$rating"}}}])
-        .exec((err,result) => console.log(result) 
-      //         Rental.findByIdAndUpdate({_id:rental},{rating:result[0].avgRating},{new:true},(err,rental)=>{
-      //   if(err) throw err;
-      //   if(rental) console.log(rental)
-      // })
+        .aggregate([{$match: {rental:ObjectId(rental)}},
+                    {
+          $group: {_id: rental,avgRating: {$avg: "$rating"}}
+        }
+                   ])
+        .exec((err,result) => 
+              Rental.findByIdAndUpdate({_id:rental},{rating:result[0].avgRating},{new:true},(err,rental)=>{
+        if(err) throw err;
+        if(rental) console.log(rental)
+      })
              );
       return res.status(200).json(cmt);
     }

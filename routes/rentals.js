@@ -7,6 +7,7 @@ const upload = require('../services/image-upload');
 const singleUpload = upload.single('image');
 const manyUpload = upload.any();
 const UserCtrl = require('../controllers/user');
+const RentalCtrl = require('../controllers/rental')
 const Datauri = require('datauri');
 const path = require('path');
 const cloudinary = require('cloudinary')
@@ -16,21 +17,7 @@ router.get('/secret', UserCtrl.authMiddleware, function (req, res) {
     res.json({ "secret": true });
 });
 
-router.get('/manage', UserCtrl.authMiddleware, function (req, res) {
-    const user = res.locals.user;
-
-    Rental
-        .where({ user })
-        .populate('bookings')
-        .exec(function (err, foundRentals) {
-
-            if (err) {
-                return res.status(422).send({ errors: normalizeErrors(err.errors) });
-            }
-
-            return res.json(foundRentals);
-        });
-});
+router.get('/manage', UserCtrl.authMiddleware, RentalCtrl.getUserRentals);
 
 router.get('/:id/verify-user', UserCtrl.authMiddleware, function (req, res) {
     const user = res.locals.user;
@@ -44,7 +31,7 @@ router.get('/:id/verify-user', UserCtrl.authMiddleware, function (req, res) {
             }
 
             if (foundRental.user.id !== user.id) {
-                return res.status(422).send({ errors: [{ title: 'Invalid User!', detail: 'You are not rental owner!' }] });
+                return res.status(422).send({ errors: { title: 'Invalid User!', detail: 'You are not rental owner!' } });
             }
 
 

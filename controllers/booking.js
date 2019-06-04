@@ -13,13 +13,14 @@ const config = require('../config');
 exports.createBooking = (req, res) => {
   var error = false;
   const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
-  const start = startAt.split('/');
+  console.log(new Date(moment(startAt,'DD/MM/YYYY')))
+    console.log(new Date(moment(endAt,'DD/MM/YYYY')))
+
   const user = res.locals.user;
-  var d1 = new Date(start[0],start[1],start[2]); //"now"
-  const end = endAt.split('/');
-  var d2 = new Date(end[0],end[1],end[2])  // some date
-  console.log(d1)
+  var d1 = new Date(moment(startAt,'DD/MM/yyyy')); //"now"
+  var d2 = new Date(moment(endAt,'DD/MM/yyyy'));  // some date
   var timeDiff = (d2.getTime() - d1.getTime());
+  console.log(timeDiff)
   if(timeDiff <= 0)
     return res.status(422).send({ errors: { title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ' } });
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));

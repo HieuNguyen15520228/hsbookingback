@@ -115,3 +115,36 @@ exports.createRental = (req, res) => {
             .catch((err) => { return res.status(422).send({ errors: normalizeErrors(err.errors) }); })
     });
 }
+exports.deleteRental = (req, res) => {
+    const user = res.locals.user;
+    Rental
+        .findById(req.params.id)
+        .populate('user', '_id')
+        .populate({
+            path: 'bookings',
+            select: 'startAt',
+            match: { startAt: { $gt: new Date() } }
+        })
+        .exec(function (err, foundRental) {
+
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+
+            if (user.id !== foundRental.user.id) {
+                return res.status(422).send({ errors: { title: 'Invalid User!', detail: 'You are not rental owner!' }});
+            }
+
+            if (foundRental.bookings.length > 0) {
+                return res.status(422).send({ errors: { title: 'Active Bookings!', detail: 'Không thể xóa nơi ở này' } });
+            }
+
+            foundRental.remove(function (err) {
+                if (err) {
+                    return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                }
+                Rental.find({}).then((rental) => res.json(rental))
+                // return res.json({ 'status': 'deleted' });
+            });
+        });
+}

@@ -13,12 +13,11 @@ const config = require('../config');
 exports.createBooking = (req, res) => {
   var error = false;
   const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
-  console.log(new Date(moment(startAt,'DD/MM/YYYY')))
-    console.log(new Date(moment(endAt,'DD/MM/YYYY')))
-
   const user = res.locals.user;
-  var d1 = new Date(moment(startAt,'DD/MM/yyyy')); //"now"
-  var d2 = new Date(moment(endAt,'DD/MM/yyyy'));  // some date
+  console.log(moment(startAt,'DD/MM/YYYY').format('MM/DD/'))
+  var d1 = new Date("06/27/2018")//"now"
+  console.log(d1)
+  var d2 = new Date("06/27/2018")// some date
   var timeDiff = (d2.getTime() - d1.getTime());
   console.log(timeDiff)
   if(timeDiff <= 0)

@@ -12,12 +12,12 @@ const config = require('../config');
 
 exports.createBooking = (req, res) => {
   var error = false;
-  const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
+  var { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
   const user = res.locals.user;
-  console.log(moment(startAt,'DD/MM/YYYY').format('MM/DD/'))
-  var d1 = new Date("06/27/2018")//"now"
-  console.log(d1)
-  var d2 = new Date("06/27/2018")// some date
+  startAt = moment(startAt,'DD/MM/YYYY').format('MM/DD/YYYY');
+  endAt = moment(endAt,'DD/MM/YYYY').format('MM/DD/YYYY');
+  var d1 = new Date(startAt)//"now"
+  var d2 = new Date(endAt)// some date
   var timeDiff = (d2.getTime() - d1.getTime());
   console.log(timeDiff)
   if(timeDiff <= 0)
@@ -82,7 +82,7 @@ exports.createBooking = (req, res) => {
         //   return res.status(422).send({ errors: [{ title: 'Payment Error', detail: err }] });
         // }
       } else {
-        return res.status(422).send({ errors: [{ title: 'Đặt phòng không hợp lệ!', detail: 'Ngày bạn chọn đã được đặt!' }] });
+        return res.status(422).send({ errors: { title: 'Đặt phòng không hợp lệ!', detail: 'Ngày bạn chọn đã được đặt!' } });
       }
     })
 }
@@ -202,42 +202,3 @@ function isValidUserBook(proposedBooking, user) {
   console.log("isValid " + isValid);
   return isValid;
 }
-//Chưa làm dc
-async function createPayment(booking, toUser, token) {
-  const { user } = booking;
-  const tokenId = token.id || token;
-
-  const customer = await stripe.customers.create({
-    source: tokenId,
-    email: user.email
-  });
-
-  if (customer) {
-    User.update({ _id: user.id }, { $set: { stripeCustomerId: customer.id } }, () => { });
-
-    const payment = new Payment({
-      fromUser: user,
-      toUser,
-      fromStripeCustomerId: customer.id,
-      booking,
-      tokenId: token.id,
-      amount: booking.totalPrice * 100 * CUSTOMER_SHARE
-    });
-
-    try {
-      const savedPayment = await payment.save();
-      return { payment: savedPayment };
-
-    } catch (err) {
-      return { err: err.message };
-    }
-
-  } else {
-    return { err: 'Cannot process Payment!' }
-  }
-}
-
-
-
-
-

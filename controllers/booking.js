@@ -11,12 +11,15 @@ const config = require('../config');
 // const CUSTOMER_SHARE = 0.8;
 
 exports.createBooking = (req, res) => {
+  console.log(req.body);
   var error = false;
   const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
   const user = res.locals.user;
   var d1 = new Date(startAt); //"now"
+  console.log(new Date(startAt))
   var d2 = new Date(endAt)  // some date
   var timeDiff = Math.abs(d2.getTime() - d1.getTime());
+  console.log(timeDiff)
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
   const totalPrice = price * days;
   // const totalPrice = rental.price * days;

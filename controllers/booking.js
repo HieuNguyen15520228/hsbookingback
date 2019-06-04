@@ -16,7 +16,6 @@ exports.createBooking = (req, res) => {
   const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
   const user = res.locals.user;
   var d1 = new Date(startAt); //"now"
-  console.log(new Date(startAt))
   var d2 = new Date(endAt)  // some date
   var timeDiff = Math.abs(d2.getTime() - d1.getTime());
   console.log(timeDiff)

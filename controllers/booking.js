@@ -11,17 +11,17 @@ const config = require('../config');
 // const CUSTOMER_SHARE = 0.8;
 
 exports.createBooking = (req, res) => {
-  console.log(req.body);
   var error = false;
   const { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;
+  const start = startAt.split('/');
   const user = res.locals.user;
-  var d1 = new Date(startAt); //"now"
-  var d2 = new Date(endAt)  // some date
+  var d1 = new Date(start[0],start[1],start[2]); //"now"
+  const end = endAt.split('/');
+  var d2 = new Date(end[0],end[1],end[2])  // some date
+  console.log(d1)
   var timeDiff = (d2.getTime() - d1.getTime());
   if(timeDiff <= 0)
     return res.status(422).send({ errors: { title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ' } });
-
-  console.log(timeDiff)
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
   const totalPrice = price * days;
   // const totalPrice = rental.price * days;

@@ -31,7 +31,7 @@ exports.createBooking = (req, res) => {
       }
       if (foundRental.user != null) {
         if (foundRental.user.id === user._id) {
-          return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Không thể đặt phòng cho địa điểm bạn tạo!' }] });
+          return res.status(422).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Không thể đặt phòng cho địa điểm bạn tạo!' } });
         }
       }
       // const wait =  User.findById(user._id)

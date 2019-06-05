@@ -148,3 +148,49 @@ exports.deleteRental = (req, res) => {
             });
         });
 }
+exports.getTopRentals = (req, res) => {
+    Rental
+        .find({})
+        .sort({ rating: -1 })
+        .limit(10)
+        .select('_id image title address rating price')
+        .exec(function (err, foundRental) {
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+            return res.json(foundRental);
+        });
+}
+exports.updateRental =(req, res) => {
+    const user = res.locals.user
+    Rental.findById(req.params.id, (err, foundRental) => {
+        if (err)
+            return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        if (!foundRental)
+            return res.status(422).send({ errors: [{ title: 'No Rentals Found!', detail: `Không tồn tại nơi ở này` }] });
+        if (String(foundRental.user) !== String(user._id)) {
+            return res.status(422).send({ errors: [{ title: 'Không có quyền!', detail: `Bạn không có quyền chỉnh sửa` }] });
+        } 
+        const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
+            isElevator, isWashing, isFridge, isConditioner, image } = req.body;
+        const change = image.map(i => {
+            if (i.includes(',')) {
+                // const base64 = (i.split(','))[1]
+                return cloudinary.uploader.upload(i)
+                    .then(result =>
+                        image[image.indexOf(i)] = result.url.slice(0, 45) + "q_auto:low/" + result.url.slice(45)
+                    )
+
+            }
+        })
+        Promise.all(change).then(() => {
+            Object.assign(req.body, image);
+            const data = {title, city, address, category, bedrooms, bathrooms, 
+                description, price, people, isTv, isWifi,
+                isElevator, isWashing, isFridge, isConditioner, image}
+            Rental.findByIdAndUpdate({ _id: req.body._id }, data, { new: true }, (err, rental) => {
+                res.json(rental)
+            })
+        })
+    })
+}

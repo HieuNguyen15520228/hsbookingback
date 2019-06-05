@@ -31,7 +31,8 @@ exports.getUser = (req, res) => {
   //   return res.status(422).send({ errors: normalizeErrors(err.errors) });
 }
 exports.getAllUser = (req, res) => {
-    User.find()
+  const user = req.body.userId;
+    User.findById({_id:user})
       .populate("searchHistory",'image title address _id')
       .populate('rentals bookings')
       .exec((err, foundUser) => {
@@ -43,7 +44,18 @@ exports.getAllUser = (req, res) => {
   
 }
 
-
+exports.DeactiveUser = (req, res) => {
+    User.find()
+      .populate("searchHistory",'image title address _id')
+      .populate('rentals bookings')
+      .exec((err, foundUser) => {
+        if (err) {
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        }
+        return res.json(foundUser);
+      })
+  
+}
 
 
 exports.auth = (req, res) => {

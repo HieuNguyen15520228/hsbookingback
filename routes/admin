@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const UserCtrl = require('../controllers/admin-user');
+const AdminCtrl = require('../controllers/admin-user');
 const BookingCtrl = require('../controllers/admin-booking');
 
-
+router.post('/login', AdminCtrl. )
 
 module.exports = router;

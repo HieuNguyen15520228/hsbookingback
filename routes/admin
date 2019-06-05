@@ -1,0 +1,9 @@
+const express = require('express');
+const router = express.Router();
+
+const UserCtrl = require('../controllers/admin-user');
+const BookingCtrl = require('../controllers/admin-booking');
+
+
+
+module.exports = router;

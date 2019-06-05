@@ -23,6 +23,7 @@ const rentalRoutes = require('./routes/rentals'),
       bookingRoutes = require('./routes/bookings'),
       paymentRoutes = require('./routes/payments'),
       commentRoutes = require('./routes/comments'),
+      adminRoutes = require('./routes/admin'),
       imageUploadRoutes = require('./routes/image-upload');
       var connectWithRetry = function() {
         return mongoose.connect('mongodb://nhat123:nhat123@ds147225.mlab.com:47225/rentaluit', function(err) {
@@ -65,6 +66,8 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/admin', adminRoutes);
+
 app.use('/api/v1', imageUploadRoutes);
 
 

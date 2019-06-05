@@ -16,7 +16,7 @@ exports.postComment = (req,res) => {
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
   Comment.find({rental:rental, user:user},(err,cmt)=>{
-    console.log(cmt)
+    
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmt)
@@ -37,7 +37,6 @@ exports.postComment = (req,res) => {
         .exec((err,result) => 
               Rental.findByIdAndUpdate({_id:rental},{rating:result[0].avgRating},{new:true},(err,rental)=>{
         if(err) throw err;
-        if(rental) console.log(rental)
       })
              );
       return res.status(200).json(cmt);

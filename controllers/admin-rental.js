@@ -11,7 +11,7 @@ const cloudinary = require('cloudinary')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.getRentals = (req, res) => {
-  const user = res.locals.user;
+  
 
     Rental
         .find()

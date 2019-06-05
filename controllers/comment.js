@@ -20,8 +20,8 @@ exports.postComment = (req,res) => {
   //     return res.status(422).send({ errors: normalizeErrors(err.errors) });
   //   if(cmt.length > 0)
   //     return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });
-    if(!cmt)
-      {
+    // if(!cmt)
+    //   {
         Comment.create(cmt, (err, cmt) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });

@@ -15,7 +15,15 @@ exports.postComment = (req,res) => {
   const comment = req.body.comment;
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
-  Comment.create(cmt, (err, cmt) => {
+  Comment.find({rental:rental, user:user},(err,cmt)=>{
+    console.log(cmt)
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(cmt)
+      return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });
+    if(!cmt)
+      {
+        Comment.create(cmt, (err, cmt) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmt)
@@ -35,6 +43,9 @@ exports.postComment = (req,res) => {
       return res.status(200).json(cmt);
     }
   })
+      }
+  })
+  
 }
 exports.getComment = (req,res) =>{
   const limit = req.body.limit;

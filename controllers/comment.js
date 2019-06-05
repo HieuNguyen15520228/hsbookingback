@@ -6,7 +6,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Rental = require('../models/rental');
 const User = require('../models/user');
 const Comment = require('../models/comment')
-
+const _ = require('lodash')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.postComment = (req,res) => {
@@ -15,12 +15,11 @@ exports.postComment = (req,res) => {
   const comment = req.body.comment;
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
-  Comment.find({rental:rental, user:user},(err,cmt)=>{
-    
-    if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(cmt)
-      return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });
+  // Comment.find({rental:rental, user:user},(err,cmt)=>{
+  //   if(err)
+  //     return res.status(422).send({ errors: normalizeErrors(err.errors) });
+  //   if(cmt.length > 0)
+  //     return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });
     if(!cmt)
       {
         Comment.create(cmt, (err, cmt) => {
@@ -42,8 +41,8 @@ exports.postComment = (req,res) => {
       return res.status(200).json(cmt);
     }
   })
-      }
-  })
+      // }
+  // })
   
 }
 exports.getComment = (req,res) =>{

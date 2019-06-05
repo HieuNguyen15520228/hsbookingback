@@ -84,6 +84,8 @@ exports.auth = (req, res) => {
     }
     if(!user.isVerified)
      return res.status(401).send({ errors: { status: 'Error', detail: 'Tài khoản chưa xác thực' } });
+    if(user.status === 'inactive')
+      return res.status(404).send({ errors: { title: 'Tài khoản bị vô hiệu!', detail: 'Tài khoản bạn đã bị vô hiệu' } });
     if (user.hasSamePassword(password)) {
       const token = jwt.sign({
         userId: user.id,

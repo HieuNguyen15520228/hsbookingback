@@ -31,8 +31,7 @@ exports.getUser = (req, res) => {
   //   return res.status(422).send({ errors: normalizeErrors(err.errors) });
 }
 exports.getAllUser = (req, res) => {
-  const user = req.body.userId;
-    User.findById({_id:user})
+    User.find()
       .populate("searchHistory",'image title address _id')
       .populate('rentals bookings')
       .exec((err, foundUser) => {
@@ -44,16 +43,17 @@ exports.getAllUser = (req, res) => {
   
 }
 
-exports.DeactiveUser = (req, res) => {
-    User.find()
-      .populate("searchHistory",'image title address _id')
-      .populate('rentals bookings')
-      .exec((err, foundUser) => {
-        if (err) {
+exports.deactiveUser = (req, res) => {
+  const userId = req.body.userId;
+  const user = res.locals.user;
+  if(user._id === userId)
+      return res.status(400).send({ errors: { title: 'Không thể vô hiệu!', detail: 'Không thể vô hiệu hóa admin' }});
+  User.findByIdAndUpdate({_id:userId},{status:'inactive'},{new: true},(err,user) =>{
+      if(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
-        }
-        return res.json(foundUser);
-      })
+      if(user)
+        return res.status(200).json(user)
+    })
   
 }
 

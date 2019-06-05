@@ -67,27 +67,7 @@ exports.oldAvatar = (req, res) => {
       return res.status(200).json(user)
   })
 }
-// singleUpload(req, res, function (err) {
-//   if (err) {
-//     return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
-//   }
-//   User.findOne({ email }, (err, user) => {
-//     if (err)
-//       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-//     if (user) {
-//       user.image = req.file.path;
-//       user.save((err) => {
-//         if (err) {
-//           return res.status(422).send({ errors: normalizeErrors(err.errors) });
-//         }
-//         return res.json({ 'changedAvatar': true });
-//       })
-//     }
-//   })
-// });
 
-// }
-//Đăng nhập
 exports.auth = (req, res) => {
   const { email, password } = req.body;
 

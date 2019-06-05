@@ -55,7 +55,8 @@ const userSchema = new Schema({
   identityCard: {type: String, default:''},
   isVerified: { type: Boolean, default: false },
   registerToken : {type: String, default: undefined},
-  searchHistory: [{type: Schema.Types.ObjectId, ref: 'Rental'}]
+  searchHistory: [{type: Schema.Types.ObjectId, ref: 'Rental'}],
+  role: {type: String, default: user}
 });
 
 userSchema.methods.hasSamePassword = function(requestedPassword) {

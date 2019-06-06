@@ -25,7 +25,7 @@ const rentalSchema = new Schema({
   isElevator : { type: Boolean, default: false},
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }]
-});
+},{timestamps: {}});
 
 
 module.exports = mongoose.model('Rental', rentalSchema);

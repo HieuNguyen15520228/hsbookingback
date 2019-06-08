@@ -1,4 +1,9 @@
 const User = require('../models/user');
+const Rental = require('../models/rental');
+const Booking = require('../models/booking');
+const Comment = require('../models/comment');
+const Payment = require('../models/payment');
+
 const { normalizeErrors } = require('../helpers/mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('../config/prod');
@@ -82,7 +87,7 @@ exports.auth = (req, res) => {
           image: user.image,
           role: user.role
         }, config.SECRET, { expiresIn: '12h' });
-      return res.json(token);
+      return res.status(200).json(token);
     } else {
       return res.status(400).send({ title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' });
     }
@@ -148,10 +153,26 @@ exports.updateInfo = (req, res) => {
   })
 }
 
-exports.getUsersNumber = (req, res) => {
+exports.getNumbers = (req, res) => {
+  const result = {}
   User.count({}, (err, count) =>{
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(count)
+      result.push({user: count})
   })
+  Rental.count({}, (err, count) =>{
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(count)
+      result.push({rental: count})
+  })
+  Booking.count({}, (err,count) => {
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(count)
+      result.push({booking: count})
+  })
+  return res.status(200).json(result);
 }
 

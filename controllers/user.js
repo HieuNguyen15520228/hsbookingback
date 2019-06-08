@@ -133,10 +133,11 @@ exports.register = (req, res) => {
         password,
         registerToken
       });
-      user.save((err) => {
+      user.save((err,user) => {
         if (err) {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
+        console.log(user)
         var smtpTransport = nodemailer.createTransport(/*'SMTP',*/ {
         host: 'smtp.gmail.com',
         port: 465,

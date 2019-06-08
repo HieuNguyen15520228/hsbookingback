@@ -157,14 +157,12 @@ exports.getNumbers = (req, res) => {
   const result = {}
   const countPromises = [
 
-  User.countDocuments({}).exec().then(count => result.user = count)
-  Rental.countDocuments({}).exec().then(count => result.rental = count)
-  Booking.countDocuments({}).exec().then(count => result.booking = count);
-  Payment.countDocuments({}).exec().then(count => result.payment = count);
-  Comment.countDocuments({}).exec().then(count => result.comment = count);
+  User.countDocuments({}).exec().then(count => result.user = count),
+  Rental.countDocuments({}).exec().then(count => result.rental = count),
+  Booking.countDocuments({}).exec().then(count => result.booking = count),
+  Payment.countDocuments({}).exec().then(count => result.payment = count),
+  Comment.countDocuments({}).exec().then(count => result.comment = count)
 ]
-
-  return Promise.all(countPromises)
-  .then(() => res.json(result)
+return Promise.all(countPromises).then(() => res.json(result))
 }
 

@@ -162,7 +162,9 @@ exports.approveRental = (req,res) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(rental){
-      Rental.find({ $or:[ {'status':undefined}, {'status':'pending'}]},(err,rentals)=>{
+      Rental.find({ $or:[ {'status':undefined}, {'status':'pending'}]})
+      .populate('user','image username _id')
+      .exec((err,rentals)=>{
         if(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if(rentals)

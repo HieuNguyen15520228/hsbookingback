@@ -72,7 +72,7 @@ exports.auth = (req, res) => {
     if (!user) {
       return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
     }
-  
+    if (user.role === 'admin'){
     if (user.hasSamePassword(password)) {
       const token = jwt.sign({
         userId: user.id,
@@ -86,6 +86,7 @@ exports.auth = (req, res) => {
     } else {
       return res.status(400).send({ errors: { title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' }});
     }
+    } else return res.status(403).send({detail: 'Bạn không có quyền truy cập' });
   });
 }
 

@@ -10,6 +10,7 @@ router.post('/deactive', AdminCtrl.isAdmin,AdminCtrl.deactiveUser);
 
 router.get('/getRentals', AdminCtrl.isAdmin,RentalCtrl.getRentals);
 router.get('/getPendingRentals', AdminCtrl.isAdmin, RentalCtrl.getPendingRentals);
+router.post('/approveRental', AdminCtrl.isAdmin, RentalCtrl.approveRental);
 
 router.get('/getNumbers', AdminCtrl.isAdmin, AdminCtrl.getNumbers)
 module.exports = router;

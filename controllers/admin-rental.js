@@ -158,14 +158,19 @@ exports.updateRental =(req, res) => {
 }
 exports.approveRental = (req,res) => {
   const rental = req.body.rentalId;
-  Rental.findByIdAndUpdate({rental},{'status':'approved'},{new: true},(err,rental)=>{
+  console.log(req.body)
+  Rental.findByIdAndUpdate(rental,{'status':'approved'},{new: true},(err,rental)=>{
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(rental)
+    if(rental){
       Rental.find({},(err,rentals)=>{
         if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-        
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        if(rentals)
+          return res.status(200).json(rentals)
       })
+    }
+    if(!rental)
+      return res.status(401).send({detail: `Không tồn tại hoặc đã được duyệt` });
   })
 }

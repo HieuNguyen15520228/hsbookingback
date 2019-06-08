@@ -24,7 +24,8 @@ const rentalSchema = new Schema({
   isFridge: { type: Boolean, default: false},
   isElevator : { type: Boolean, default: false},
   user: { type: Schema.Types.ObjectId, ref: 'User' },
-  bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }]
+  bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],
+  status: {type: String, default:'pending'}
 },{timestamps: {}});
 
 

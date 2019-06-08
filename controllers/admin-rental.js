@@ -11,8 +11,6 @@ const cloudinary = require('cloudinary')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.getRentals = (req, res) => {
-  
-
     Rental
         .find()
         .populate('bookings')
@@ -24,6 +22,17 @@ exports.getRentals = (req, res) => {
             }
 
             return res.json(foundRentals);
+        });
+}
+exports.getPendingRentals = (req, res) => {
+    Rental
+        .find({'status':'pending'})
+        .populate('user','image username')
+        .exec((err, foundRentals) => {
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+            return res.status(200).json(foundRentals);
         });
 }
 

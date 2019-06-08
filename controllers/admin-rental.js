@@ -156,3 +156,16 @@ exports.updateRental =(req, res) => {
         })
     })
 }
+exports.approveRental = (req,res) => {
+  const rental = req.body.rentalId;
+  Rental.findByIdAndUpdate({rental},{'status':'approved'},{new: true},(err,rental)=>{
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(rental)
+      Rental.find({},(err,rentals)=>{
+        if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        
+      })
+  })
+}

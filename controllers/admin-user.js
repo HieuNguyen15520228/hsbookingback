@@ -148,3 +148,10 @@ exports.updateInfo = (req, res) => {
   })
 }
 
+exports.getUsersNumber = (req, res) => {
+  User.count({}, (err, count) =>{
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+  })
+}
+

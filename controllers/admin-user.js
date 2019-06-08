@@ -62,7 +62,7 @@ exports.auth = (req, res) => {
   const { email, password } = req.body;
 
   if (!password || !email) {
-    return res.status(422).send({ title: 'Data missing!', detail: 'Provide email and password!' });
+    return res.status(422).send({ detail: 'Provide email and password!' });
   }
 
   User.findOne({ email }, (err, user) => {
@@ -70,21 +70,21 @@ exports.auth = (req, res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
-      return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
+      return res.status(404).send({ detail: 'Người dùng không tồn tại' } );
     }
-    if (user.role === 'admin'){
-    if (user.hasSamePassword(password)) {
-      const token = jwt.sign({
-        userId: user.id,
-        username: user.username,
-        email: user.email,
-        image: user.image,
-        role: user.role
-      }, config.SECRET, { expiresIn: '12h' });
-
+    if (user.role === 'admin')
+    {
+      if (user.hasSamePassword(password)) {
+        const token = jwt.sign({
+          userId: user.id,
+          username: user.username,
+          email: user.email,
+          image: user.image,
+          role: user.role
+        }, config.SECRET, { expiresIn: '12h' });
       return res.json(token);
     } else {
-      return res.status(400).send({ errors: { title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' }});
+      return res.status(400).send({ title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' });
     }
     } else return res.status(403).send({detail: 'Bạn không có quyền truy cập' });
   });

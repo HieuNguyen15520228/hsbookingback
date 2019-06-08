@@ -154,30 +154,17 @@ exports.updateInfo = (req, res) => {
 }
 
 exports.getNumbers = (req, res) => {
-  var result = []
-  User.count({}, (err, count) =>{
-    if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(count)
-      result.push({user : count})
-  })
-  console.log(result)
-  Rental.count({}, (err, count) =>{
-    if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(count)
-      result.push({rental : count})
-  })
-    console.log(result)
+  const result = {}
+  const countPromises = [
 
-  Booking.count({}, (err,count) => {
-    if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(count)
-      result.push({booking : count})
-  })
-    console.log(result)
+  User.countDocuments({}).exec().then(count => result.user = count)
+  Rental.countDocuments({}).exec().then(count => result.rental = count)
+  Booking.countDocuments({}).exec().then(count => result.booking = count);
+  Payment.countDocuments({}).exec().then(count => result.payment = count);
+  Comment.countDocuments({}).exec().then(count => result.comment = count);
+]
 
-  return res.status(200).json(result);
+  return Promise.all(countPromises)
+  .then(() => res.json(result)
 }
 

@@ -303,7 +303,6 @@ exports.authOrNot = (req, res, next) => {
   const token = req.headers.authorization;
   if (token) {
     const user = parseToken(token);
-
     User.findById(user.userId, (err, user) => {
       if (err) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });

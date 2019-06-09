@@ -26,7 +26,7 @@ exports.getRentals = (req, res) => {
 }
 exports.getPendingRentals = (req, res) => {
     Rental
-        .find({'status':undefined})
+        .find({ $or:[ {'status':undefined}, {'status':'pending'}]})
         .populate('user','image username')
         .exec((err, foundRentals) => {
             if (err) {

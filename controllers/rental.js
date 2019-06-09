@@ -15,6 +15,7 @@ exports.getUserRentals = (req, res) => {
 
     Rental
         .where({ user })
+        .sort({createdAt: -1})
         .populate('bookings')
         .exec(function (err, foundRentals) {
 

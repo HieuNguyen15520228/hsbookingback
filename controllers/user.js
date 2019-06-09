@@ -199,11 +199,11 @@ exports.resetPassword = (req, res) => {
     (done) => {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
         if (!user) {
-          return res.status(401).send({ errors: [{ title: 'Token reset mật khẩu không hợp lệ hoặc hết hiệu lực' }] })
+          return res.status(401).send({ detail: 'Token reset mật khẩu không hợp lệ hoặc hết hiệu lực' })
         }
         if (user) {
           if (req.body.newPassword !== req.body.newPasswordConfirmation) {
-            return res.status(422).send({ errors: [{ title: 'Mật khẩu không hợp lệ!', detail: 'Mật khẩu xác nhận không hợp lệ!' }] });
+            return res.status(422).send({ detail: 'Mật khẩu xác nhận không hợp lệ!'});
           }
           user.password = req.body.newPassword;
           user.resetPasswordToken = undefined;

@@ -11,7 +11,7 @@ const singleUpload = upload.single('image');
 //26/03
 const cloudinary = require('cloudinary')
 const multerUpload = require('../services/multerUpload')
-
+const moment = require('moment')
 
 exports.getUser = (req, res) => {
   const requestedUserId = req.params.id;
@@ -329,6 +329,9 @@ exports.updateInfo = (req, res) => {
   const user = res.locals.user;
   const _id = user.id;
   
+  let dateOfBirth = moment(data.dateOfBirth,'DD/MM/YYYY').format('MM/DD/YYYY');
+  dateOfBirth = new Date(dateOfBirth);
+  console.log(dateOfBirth)
   User.findOne({ _id }, (err, user) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });

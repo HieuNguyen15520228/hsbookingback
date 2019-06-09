@@ -150,7 +150,7 @@ exports.deleteRental = (req, res) => {
 }
 exports.getTopRentals = (req, res) => {
     Rental
-        .find({})
+        .find({status:'approved'})
         .sort({ rating: -1 })
         .limit(10)
         .select('_id image title address rating price')

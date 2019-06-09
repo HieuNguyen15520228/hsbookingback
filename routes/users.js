@@ -23,6 +23,8 @@ router.post('/oldAvatar', User.authMiddleware, User.oldAvatar)
 router.post('/updateinfo', User.authMiddleware, User.updateInfo);
 router.post('/reset/:token', User.resetPassword);
 router.post('/addBookmark', User.authMiddleware,User.addBookmark);
+router.post('/removeBookmark', User.authMiddleware,User.addBookmark);
+
 // router.post("/searchHistory", User.authMiddleware, User.addSearchHistory);
 module.exports = router;
 

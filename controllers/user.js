@@ -372,7 +372,6 @@ exports.addBookmark = (req,res) => {
         if(rentalId)
         bookmark.unshift(rentalId)
         user.bookmark = bookmark;
-        console.log(user.bookmark)
         user.save((err) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
@@ -380,7 +379,7 @@ exports.addBookmark = (req,res) => {
         return res.status(200).json({"bookmark": user.bookmark});  
       }});
 }
-exports.addBookmark = (req,res) => {
+exports.removeBookmark = (req,res) => {
   const rentalId = req.body.rentalId;
     const user= res.locals.user;
     Rental.findById(rentalId)
@@ -393,6 +392,7 @@ exports.addBookmark = (req,res) => {
         if(rentalId)
         bookmark.remove(rentalId)
         user.bookmark = bookmark;
+        console.log(user.bookmark)
         user.save((err) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });

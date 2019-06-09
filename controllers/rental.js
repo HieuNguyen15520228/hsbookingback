@@ -68,7 +68,6 @@ exports.addSearchHistory = (req, res) => {
               if(rentalId)
                 searchHistory.unshift(rentalId)
               user.searchHistory = searchHistory;
-              console.log(searchHistory);
               user.save((err) => {
                 if (err) {
                   return res.status(422).send({ errors: normalizeErrors(err.errors) });

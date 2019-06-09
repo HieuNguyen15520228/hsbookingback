@@ -58,7 +58,7 @@ const userSchema = new Schema({
   searchHistory: [{type: Schema.Types.ObjectId, ref: 'Rental'}],
   role: {type: String, default: 'user'},
   status: {type: String, default: 'active'},
-  bookmark: [{type: String}]
+  bookmark: [{type: Schema.Types.ObjectId, ref: 'Rental'}]
 });
 
 userSchema.methods.hasSamePassword = function(requestedPassword) {

@@ -328,12 +328,12 @@ exports.updateInfo = (req, res) => {
   const data = req.body
   const user = res.locals.user;
   const _id = user.id
-  console.log(data)
   User.findOne({ _id }, (err, user) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
+      console.log('1')
       return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
     }
     User.findOneAndUpdate({ _id }, data, (err, user) => {

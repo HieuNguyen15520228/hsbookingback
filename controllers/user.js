@@ -328,7 +328,6 @@ exports.updateInfo = (req, res) => {
   const data = req.body
   const user = res.locals.user;
   const _id = user.id;
-  console.log(data.dateOfBirth)
   User.findOne({ _id }, (err, user) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });

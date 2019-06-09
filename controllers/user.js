@@ -361,7 +361,6 @@ exports.confirmation = (req,res) =>{
 }
 exports.addBookmark = (req,res) => {
   const {userId, rentalId} = req.body;
-  console.log(rentalId)
   User.findById(userId,(err,user) =>{
     if(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });    
@@ -372,11 +371,12 @@ exports.addBookmark = (req,res) => {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });    
       if(!rental)
         return res.status(404).send({ detail: 'Không tồn tại nơi ở' });
-      const bookmark = user.bookmark;
-      user.bookmark = user.bookmark.push(rentalId);
-      console.log(user)
-      user.save((err,user) =>{
-        console.log(user)
+      let bookmark = user.bookmark;
+      console.log(bookmark)
+      bookmark = bookmark.unshift(rentalId);
+      console.log(bookmark)
+      user.bookmark = bookmark;
+      user.save((err) =>{
       })
     })
   })

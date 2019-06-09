@@ -336,12 +336,14 @@ exports.updateInfo = (req, res) => {
       console.log('1')
       return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
     }
-    User.findOneAndUpdate({ _id }, data, (err, user) => {
+    User.findOneAndUpdate({ _id }, data,{new: true}, (err, user) => {
       if (err)
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
 
       if (user)
+        {
         return res.json(user)
+        }
     })           // returns Query
 
   })

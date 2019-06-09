@@ -176,9 +176,9 @@ exports.changePass = (req, res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
-      return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
+      return res.status(422).send({ detail: 'Người dùng không tồn tại' });
     }
-
+    console.log(user)
     if (user.hasSamePassword(password)) {
       user.password = newPassword;
       user.save((err) => {
@@ -189,7 +189,7 @@ exports.changePass = (req, res) => {
       })
     }
     else {
-      return res.status(422).send({ errors: [{ title: 'Sai dữ liệu!', detail: 'Sai mật khẩu' }] });
+      return res.status(422).send({ detail: 'Sai mật khẩu' });
     }
   })
 }

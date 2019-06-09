@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Rental = require('../models/rental');
+
 const { normalizeErrors } = require('../helpers/mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('../config/prod');
@@ -349,13 +351,31 @@ exports.updateInfo = (req, res) => {
 }
 
 exports.confirmation = (req,res) =>{
-  console.log(req.params.id);
   User.findOneAndUpdate({ registerToken: req.params.id }, {isVerified: true, registerToken: undefined}, { new: true }, (err, user)=>{
     if(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });    
     if(!user)
-      return res.status(404).send({ errors:{ status: 'Error', detail: 'Token không hợp lệ hoặc tài khoản đã được xác nhận' }});
+      return res.status(404).send({ detail: 'Token không hợp lệ hoặc tài khoản đã được xác nhận' });
     return res.status(200).send({result :{status:"OK",detail:"Đã xác nhận tài khoản thành công"}})
+  })
+}
+exports.addBookmark = (req,res) => {
+  const {userId, rentalId} = req.body;
+  User.findById(userId,(err,user) =>{
+    if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });    
+    if(!user)
+      return res.status(404).send({ detail: 'Không tồn tại user' });
+    Rental.findById(rentalId,(err,rental)=>{
+      if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });    
+      if(!rental)
+        return res.status(404).send({ detail: 'Không tồn tại nơi ở' });
+      user.bookmark = user.bookmark.push(rentalId);
+      user.save((err,user) =>{
+        console.log(user)
+      })
+    })
   })
 }
 // exports.addSearchHistory = (req, res) => {

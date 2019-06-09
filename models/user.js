@@ -57,7 +57,8 @@ const userSchema = new Schema({
   registerToken : {type: String, default: undefined},
   searchHistory: [{type: Schema.Types.ObjectId, ref: 'Rental'}],
   role: {type: String, default: 'user'},
-  status: {type: String, default: 'active'}
+  status: {type: String, default: 'active'},
+  bookmark: [{type: String}]
 });
 
 userSchema.methods.hasSamePassword = function(requestedPassword) {

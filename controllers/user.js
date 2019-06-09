@@ -333,8 +333,7 @@ exports.updateInfo = (req, res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
-      console.log('1')
-      return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
+      return res.status(422).send({detail: 'Người dùng không tồn tại'});
     }
     User.findOneAndUpdate({ _id }, data,{new: true}, (err, user) => {
       if (err)

@@ -364,23 +364,21 @@ exports.addBookmark = (req,res) => {
     const user= res.locals.user;
     Rental.findById(rentalId)
       .exec(function (err, foundRental) {
-            if (err || !foundRental) {
-                return res.status(422).send({ detail: 'Could not find Rental!'  });
-            }
-      console.log(foundRental)
-            if(user){
-              const bookmark = user.bookmark;
-              if(rentalId)
-                bookmark.unshift(rentalId)
-              user.bookmark = bookmark;
-              console.log(user.bookmark)
-              user.save((err) => {
-                if (err) {
-                  return res.status(422).send({ errors: normalizeErrors(err.errors) });
-              }})
-            }
-            return res.json(foundRental);
-        });
+      if (err || !foundRental) {
+        return res.status(422).send({ detail: 'Could not find Rental!'  });
+      }
+      if(user){
+        const bookmark = user.bookmark;
+        if(rentalId)
+        bookmark.unshift(rentalId)
+        user.bookmark = bookmark;
+        console.log(user.bookmark)
+        user.save((err) => {
+          if (err) {
+            return res.status(422).send({ errors: normalizeErrors(err.errors) });
+          }})
+        return res.status(200).json({"bookmark": user.bookmark});  
+      }});
 }
 // exports.addSearchHistory = (req, res) => {
 //   const key = req.body.key

@@ -360,26 +360,27 @@ exports.confirmation = (req,res) =>{
   })
 }
 exports.addBookmark = (req,res) => {
-  const {userId, rentalId} = req.body;
-  User.findById(userId,(err,user) =>{
-    if(err)
-          return res.status(422).send({ errors: normalizeErrors(err.errors) });    
-    if(!user)
-      return res.status(404).send({ detail: 'Không tồn tại user' });
-    Rental.findById(rentalId,(err,rental)=>{
-      if(err)
-          return res.status(422).send({ errors: normalizeErrors(err.errors) });    
-      if(!rental)
-        return res.status(404).send({ detail: 'Không tồn tại nơi ở' });
-      let bookmark = user.bookmark;
-      console.log(bookmark)
-      bookmark = bookmark.unshift(rentalId);
-      console.log(bookmark)
-      user.bookmark = bookmark;
-      user.save((err) =>{
-      })
-    })
-  })
+  const rentalId = req.body.rentalId;
+    const user= res.locals.user;
+    Rental.findById(rentalId)
+      .exec(function (err, foundRental) {
+            if (err || !foundRental) {
+                return res.status(422).send({ detail: 'Could not find Rental!'  });
+            }
+      console.log(foundRental)
+            if(user){
+              const bookmark = user.bookmark;
+              if(rentalId)
+                bookmark.unshift(rentalId)
+              user.bookmark = bookmark;
+              console.log(user.bookmark)
+              user.save((err) => {
+                if (err) {
+                  return res.status(422).send({ errors: normalizeErrors(err.errors) });
+              }})
+            }
+            return res.json(foundRental);
+        });
 }
 // exports.addSearchHistory = (req, res) => {
 //   const key = req.body.key

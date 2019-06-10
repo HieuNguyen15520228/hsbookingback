@@ -7,12 +7,11 @@ const bookingSchema = new Schema({
   totalPrice: Number,
   days: Number,
   guests: Number,
-  createdAt: { type: Date, default: Date.now },
   owner: { type: Schema.Types.ObjectId, ref: 'User'},
   user: { type: Schema.Types.ObjectId, ref: 'User'},
   rental: { type: Schema.Types.ObjectId, ref: 'Rental'},
   payment: { type: Schema.Types.ObjectId, ref: 'Payment'},
   status: { type: String, default: 'pending'}
-});
+},{timestamps: {}});
 
 module.exports = mongoose.model('Booking', bookingSchema );

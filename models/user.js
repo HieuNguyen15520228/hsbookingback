@@ -43,7 +43,6 @@ const userSchema = new Schema({
   address: {type: String, default:''},
   description: {type: String, default:''},
   createdAt: { type: Date, default: Date.now },
-  // stripeCustomerId: String,
   resetPasswordToken: { type: String, default:undefined},
   resetPasswordExpires: { type: String, default:undefined},
   image: { type: String, default: 'https://res.cloudinary.com/hsuit/image/upload/q_auto:low/v1553620808/default.png'},
@@ -59,7 +58,7 @@ const userSchema = new Schema({
   role: {type: String, default: 'user'},
   status: {type: String, default: 'active'},
   bookmark: [{type: Schema.Types.ObjectId, ref: 'Rental'}]
-});
+},{timestamps: {}});
 
 userSchema.methods.hasSamePassword = function(requestedPassword) {
 

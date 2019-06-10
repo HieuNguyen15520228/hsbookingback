@@ -14,7 +14,6 @@ const rentalSchema = new Schema({
   // shared: Boolean,
   description: { type: String, required: true },
   // dailyRate: Number,
-  createdAt: { type: Date, default: Date.now },
   price : { type: Number, required: true},
   rating : { type:Number, default: 0},
   isWifi: {type: Boolean,  default: false},

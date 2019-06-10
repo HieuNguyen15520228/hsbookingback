@@ -400,6 +400,21 @@ exports.removeBookmark = (req,res) => {
         return res.status(200).json({"bookmark": user.bookmark});  
       }});
 }
+exports.getBookmark = (req, res) => {
+  const userId = res.locals.user;
+  User.findById(userId)
+  .sort({createdAt: -1})
+  .populate('bookmark','-bookings')
+  .exec((err,bookmark) => {
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(bookmark){
+      console.log(bookmark)
+      return res.status(200).json(bookmark)}
+    if(!bookmark)
+      return res.status(404).json({detail:"Không tìm thấy"})
+  })
+}
 // exports.addSearchHistory = (req, res) => {
 //   const key = req.body.key
 //   const user = res.locals.user;  const _id = user.id

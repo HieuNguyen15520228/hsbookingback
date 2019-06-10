@@ -10,5 +10,6 @@ const _ = require('lodash')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.createBlog = (req,res) => {
-  console.log(req);
+  const {title, content, image} = req.body;
+  
 }

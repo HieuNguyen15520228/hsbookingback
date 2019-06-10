@@ -22,6 +22,7 @@ exports.getUser = (req, res) => {
     User.findById(requestedUserId)
       .select('-revenue -createdAt -password -resetPasswordToken -resetPasswordExpires')
       .populate("searchHistory",'image title address _id')
+      .populate('bookmark','title address price rating _id image')
       .exec((err, foundUser) => {
         if (err) {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });

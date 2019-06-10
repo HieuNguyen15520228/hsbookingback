@@ -19,7 +19,6 @@ exports.createBooking = (req, res) => {
   var d1 = new Date(startAt)//"now"
   var d2 = new Date(endAt)// some date
   var timeDiff = (d2.getTime() - d1.getTime());
-  console.log(timeDiff)
   if(timeDiff <= 0)
     return res.status(422).send({ errors: { title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ' } });
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));

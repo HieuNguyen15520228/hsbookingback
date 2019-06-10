@@ -6,10 +6,6 @@ const { normalizeErrors } = require('../helpers/mongoose');
 const moment = require('moment');
 
 const config = require('../config');
-// const stripe = require('stripe')(config.STRIPE_SK);
-
-// const CUSTOMER_SHARE = 0.8;
-
 exports.createBooking = (req, res) => {
   var error = false;
   var { startAt, endAt, guests, id, price/*rental, paymentToken*/ } = req.body;

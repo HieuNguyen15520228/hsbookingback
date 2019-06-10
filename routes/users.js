@@ -13,11 +13,8 @@ router.post('/forgotpass', User.sendMailToken);
 router.get('/info/:id', User.authMiddleware, User.getUser);
 router.get('/confirm/:id', User.confirmation);
 router.post('/login', User.auth);
-
 router.post('/register', User.register);
-
 router.post('/change',User.authMiddleware,  User.changePass);
-
 router.post('/avatar', User.authMiddleware,multerUpload.multerUploads, User.changeAvatar);
 router.post('/oldAvatar', User.authMiddleware, User.oldAvatar)
 router.post('/updateinfo', User.authMiddleware, User.updateInfo);

@@ -33,11 +33,14 @@ exports.getBlog = (req,res) => {
 }
 exports.getBlogById = (req, res) => {
   const blogId = req.body.blogId;
-  Blog.findById(blogId,(err, blog) => {
-    if(err) {
-          return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    }
+  Blog.findById(blogId)
+  .populate('author','image username _id')
+  .exec((err,blog) => {
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(blog)
-      return res.status(200).json(blog);
+      return res.status(200).json(blog)
+    if(!blog)
+      return res.status(404).json({detail: "Không tìm thấy bài blog"})
   })
 }

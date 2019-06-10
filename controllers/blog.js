@@ -12,6 +12,7 @@ const { normalizeErrors } = require('../helpers/mongoose');
 exports.createBlog = (req,res) => {
   const author = res.locals.user._id;
   const {title, content, image} = req.body;
+  console.log(content)
   const blog = new Blog({ title, content, image, author});
   blog.save((err) => {
     if(err) {

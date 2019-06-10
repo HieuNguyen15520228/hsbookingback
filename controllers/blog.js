@@ -19,3 +19,25 @@ exports.createBlog = (req,res) => {
     }})
   return res.status(200).json({detail:"Xin hãy đợi kiểm duyệt"})
 }
+
+exports.getBlog = (req,res) => {
+  Blog.find({})
+  .sort({createdAt: -1})
+  .populate('author','image username _id')
+  .exec((err, blogs) => {
+    if(err) {
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    }
+    return res.status(200).json(blogs)
+  })
+}
+exports.getBlogById = (req, res) => {
+  const blogId = req.body.blogId;
+  Blog.findById(blogId,(err, blog) => {
+    if(err) {
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    }
+    if(blog)
+      return res.status(200).json(blog);
+  })
+}

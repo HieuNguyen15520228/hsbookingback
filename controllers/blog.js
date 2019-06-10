@@ -10,6 +10,12 @@ const _ = require('lodash')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.createBlog = (req,res) => {
+  const author = res.locals.user._id;
   const {title, content, image} = req.body;
-  
+  const blog = new Blog({ title, content, image, author});
+  blog.save((err) => {
+    if(err) {
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    }})
+  return res.status(200).json({detail:"Xin hãy đợi kiểm duyệt"})
 }

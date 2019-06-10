@@ -82,12 +82,12 @@ exports.auth = (req, res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
-      return res.status(404).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' } });
+      return res.status(404).send({ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' });
     }
     if(!user.isVerified)
-     return res.status(401).send({ errors: { status: 'Error', detail: 'Tài khoản chưa xác thực' } });
+     return res.status(401).send({ status: 'Error', detail: 'Tài khoản chưa xác thực' });
     if(user.status === 'inactive')
-      return res.status(404).send({ errors: { title: 'Tài khoản bị vô hiệu!', detail: 'Tài khoản bạn đã bị vô hiệu' } });
+      return res.status(404).send({ title: 'Tài khoản bị vô hiệu!', detail: 'Tài khoản bạn đã bị vô hiệu'  });
     if (user.hasSamePassword(password)) {
       const token = jwt.sign({
         userId: user.id,
@@ -99,7 +99,7 @@ exports.auth = (req, res) => {
 
       return res.json(token);
     } else {
-      return res.status(400).send({ errors: { title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' }});
+      return res.status(400).send({  title: 'Sai dữ liệu!', detail: 'Mật khẩu hoặc email không chính xác' });
     }
   });
 }
@@ -108,10 +108,10 @@ exports.auth = (req, res) => {
 exports.register = (req, res) => {
   const { username, email, password, passwordConfirmation } = req.body;
   if (!password || !email) {
-    return res.status(400).send({ errors: { status: 'Error', detail: 'Điền đầy đủ thông tin!' } });
+    return res.status(400).send({  status: 'Error', detail: 'Điền đầy đủ thông tin!' });
   }
   if (password !== passwordConfirmation) {
-    return res.status(400).send({ errors: { status: 'Error', detail: 'Mật khẩu xác nhận không hợp lệ!' }});
+    return res.status(400).send({ status: 'Error', detail: 'Mật khẩu xác nhận không hợp lệ!' });
   }
   User.findOne({ email }, (err, existingUser) => {
     if (err) {
@@ -119,14 +119,14 @@ exports.register = (req, res) => {
     }
 
     if (existingUser) {
-      return res.status(422).send({ errors: { status: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tại!' }});
+      return res.status(422).send({ status: 'Email không hợp lệ!', detail: 'Người dùng với email này đã tồn tại!' });
     }
     User.findOne({ username }, (err, foundUser) => {
       if (err) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
       }
       if (foundUser) {
-        return res.status(422).send({ errors: { status: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' }});
+        return res.status(422).send({  status: 'Tên người dùng không hợp lệ!', detail: 'Người dùng với username này đã tồn tại!' });
       }
       const registerToken = crypto.randomBytes(20).toString('hex');
       const user = new User({
@@ -234,7 +234,7 @@ exports.sendMailToken = (req, res, next) => {
     (token, done) => {
       User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) {
-          return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
+          return res.status(422).send({ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại'});
         }
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
@@ -323,7 +323,7 @@ function parseToken(token) {
 }
 
 function notAuthorized(res) {
-  return res.status(401).send({ errors: [{ title: 'Không được chứng thực!', detail: 'Bạn cần phải đăng nhập!' }] });
+  return res.status(401).send({  title: 'Không được chứng thực!', detail: 'Bạn cần phải đăng nhập!'});
 }
 
 exports.updateInfo = (req, res) => {

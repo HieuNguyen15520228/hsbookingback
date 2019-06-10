@@ -19,7 +19,6 @@ exports.createBooking = (req, res) => {
     return res.status(422).send({ errors: { title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ' } });
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
   const totalPrice = price * days;
-  // const totalPrice = rental.price * days;
   const booking = new Booking({ startAt, endAt, totalPrice, guests, days });
   Rental.findById(id)
     .populate('bookings')

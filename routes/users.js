@@ -21,7 +21,7 @@ router.post('/updateinfo', User.authMiddleware, User.updateInfo);
 router.post('/reset/:token', User.resetPassword);
 router.post('/addBookmark', User.authMiddleware,User.addBookmark);
 router.post('/removeBookmark', User.authMiddleware,User.removeBookmark);
-
+router.get('/getBookmark', User.authMiddleware, User.getBookmark);
 // router.post("/searchHistory", User.authMiddleware, User.addSearchHistory);
 module.exports = router;
 

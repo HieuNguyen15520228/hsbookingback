@@ -404,14 +404,13 @@ exports.getBookmark = (req, res) => {
   const userId = res.locals.user;
   User.findById(userId)
   .sort({createdAt: -1})
-  .populate('bookmark','-bookings')
-  .exec((err,bookmark) => {
+  .populate('bookmark','title address price rating _id image')
+  .exec((err,user) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(bookmark){
-      console.log(bookmark)
-      return res.status(200).json(bookmark)}
-    if(!bookmark)
+    if(user){
+      return res.status(200).json({"bookmark": user.bookmark})}
+    if(!user)
       return res.status(404).json({detail:"Không tìm thấy"})
   })
 }

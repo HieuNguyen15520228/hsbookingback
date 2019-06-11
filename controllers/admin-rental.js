@@ -27,6 +27,7 @@ exports.getRentals = (req, res) => {
 exports.getPendingRentals = (req, res) => {
     Rental
         .find({ $or:[ {'status':undefined}, {'status':'pending'}]})
+        .sort({createdAt: -1})
         .populate('user','image username')
         .exec((err, foundRentals) => {
             if (err) {
@@ -174,4 +175,8 @@ exports.approveRental = (req,res) => {
     if(!rental)
       return res.status(401).send({detail: `Không tồn tại hoặc đã được duyệt` });
   })
+}
+
+exports.deleteRental = (req, res) => {
+  
 }

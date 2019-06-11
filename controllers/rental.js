@@ -85,20 +85,27 @@ exports.createRental = (req, res) => {
             return res.status(422).send({ errors: { title: 'Rentals Found!', detail: `Tên nhà ở đã có người sử dụng` } });
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;
-      const rental = new Rental({
+
+        // Promise.all(change)
+        //     .then(() => {
+                const rental = new Rental({
                     title, city, address, category, bedrooms, bathrooms,
                     description, price, people, isTv, isWifi, isElevator, isWashing, isFridge,
                     isConditioner, image
-      });
-      const user = res.locals.user;
-      Rental.create(rental, function (err, newRental) {
-        if (err) {
-          console.log(err)
-          return res.status(422).send({ errors: normalizeErrors(err.errors) });
-        }
-        User.update({ _id: user._id }, { $push: { rentals: newRental } }, function () { });
-        return res.json(newRental);
-      });
+                });
+                const user = res.locals.user._id;
+                rental.user = user;
+                Rental.create(rental, function (err, newRental) {
+                    if (err) {
+                        console.log(err)
+                        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                    }
+                  console.log(user)
+                    User.update({ _id: user }, { $push: { rentals: newRental } }, function () { });
+                    return res.json(newRental);
+                });
+            // })
+            // .catch((err) => { return res.status(422).send({ errors: normalizeErrors(err.errors) }); })
     });
 }
 exports.deleteRental = (req, res) => {

@@ -94,25 +94,25 @@ exports.createRental = (req, res) => {
 
             }
         })
-        Promise.all(change)
-            .then(() => {
+        // Promise.all(change)
+        //     .then(() => {
                 const rental = new Rental({
                     title, city, address, category, bedrooms, bathrooms,
                     description, price, people, isTv, isWifi, isElevator, isWashing, isFridge,
                     isConditioner, image
                 });
-                const user = res.locals.user;
+                const user = res.locals.user._id;
                 rental.user = user;
                 Rental.create(rental, function (err, newRental) {
                     if (err) {
                         console.log(err)
                         return res.status(422).send({ errors: normalizeErrors(err.errors) });
                     }
-                    User.update({ _id: user.id }, { $push: { rentals: newRental } }, function () { });
+                    User.update({ _id: user._id }, { $push: { rentals: newRental } }, function () { });
                     return res.json(newRental);
                 });
-            })
-            .catch((err) => { return res.status(422).send({ errors: normalizeErrors(err.errors) }); })
+            // })
+            // .catch((err) => { return res.status(422).send({ errors: normalizeErrors(err.errors) }); })
     });
 }
 exports.deleteRental = (req, res) => {

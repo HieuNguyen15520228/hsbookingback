@@ -45,3 +45,17 @@ exports.getBlogById = (req, res) => {
       return res.status(404).json({detail: "Không tìm thấy bài blog"})
   })
 }
+
+exports.getPedingBlogs = (req,res) => {
+  console.log('1')
+  Blog.find({status:'pending'})
+  .populate('author','image _id user')
+  .exec((err,blog) => {
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(blog)
+      return res.status(200).json(blog)
+    if(!blog)
+      return res.status(404).json({detail: "Không tìm thấy bài blog"})
+  })
+}

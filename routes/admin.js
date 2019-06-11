@@ -4,7 +4,7 @@ const router = express.Router();
 const AdminCtrl = require('../controllers/admin-user');
 const BookingCtrl = require('../controllers/admin-booking');
 const RentalCtrl = require('../controllers/admin-rental');
-const BlogCtrl = require('../controllers/admin-rental')
+const BlogCtrl = require('../controllers/blog')
 
 router.post('/login', AdminCtrl.auth );
 router.get('/getUsers', AdminCtrl.isAdmin,AdminCtrl.getAllUser);
@@ -17,5 +17,5 @@ router.post('/approveRental', AdminCtrl.isAdmin, RentalCtrl.approveRental);
 router.post('/forbidRental', AdminCtrl.isAdmin, RentalCtrl.forbidRental);
 router.get('/getNumbers', AdminCtrl.isAdmin, AdminCtrl.getNumbers);
 
-router.get('/getPendingBlogs', AdminCtrl.isAdmin, )
+router.get('/getPendingBlogs', AdminCtrl.isAdmin, BlogCtrl.getPedingBlogs)
 module.exports = router;

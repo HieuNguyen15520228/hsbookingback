@@ -36,25 +36,37 @@ exports.getUser = (req, res) => {
 
 exports.changeAvatar = (req, res) => {
   const user = res.locals.user;
-  let { _id, email, oldImages } = res.locals.user;
-  if (req.file) {
-    const file = multerUpload.dataUri(req).content;
-    return cloudinary.v2.uploader.upload(file, {
-      folder: _id,
-      use_filename: true
-    })
-      .then((result) => {
-        oldImages.push(user.image);
-        const image = result.url.slice(0, 45) + "q_auto:low/" + result.url.slice(45);
-        User.findOneAndUpdate({ email }, { oldImages, image }, { new: true }, (err, user) => {
-          if (err)
-            return res.status(422).send({ errors: normalizeErrors(err.errors) });
-          if (user)
-            return res.status(200).json(user)
-        })
-      })
-      .catch((err) => { return res.status(400).send({ errros: normalizeErrors(err.err) }) })
-  }
+  let { _id, email, oldImages, image } = res.locals.user;
+  oldImages = oldImages.unshift(image)
+  console.log(oldImages)
+  const {avatar} = req.body;
+  User.findOneAndUpdate({ email }, { oldImages, image: avatar }, { new: true }, (err, user) => {
+    if (err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(!user)
+      return res.status(401).send({detail:"Khong ton tai nguoi dung"})
+    if (user)
+      return res.status(200).json(user)
+  })
+
+  // if (req.file) {
+  //   const file = multerUpload.dataUri(req).content;
+  //   return cloudinary.v2.uploader.upload(file, {
+  //     folder: _id,
+  //     use_filename: true
+  //   })
+  //     .then((result) => {
+  //       oldImages.push(user.image);
+  //       const image = result.url.slice(0, 45) + "q_auto:low/" + result.url.slice(45);
+  //       User.findOneAndUpdate({ email }, { oldImages, image }, { new: true }, (err, user) => {
+  //         if (err)
+  //           return res.status(422).send({ errors: normalizeErrors(err.errors) });
+  //         if (user)
+  //           return res.status(200).json(user)
+  //       })
+  //     })
+  //     .catch((err) => { return res.status(400).send({ errros: normalizeErrors(err.err) }) })
+  // }
 }
 
 exports.oldAvatar = (req, res) => {

@@ -6,7 +6,8 @@ const BookingCtrl = require('../controllers/admin-booking');
 const RentalCtrl = require('../controllers/admin-rental')
 router.post('/login', AdminCtrl.auth );
 router.get('/getUsers', AdminCtrl.isAdmin,AdminCtrl.getAllUser);
-router.post('/deactive', AdminCtrl.isAdmin,AdminCtrl.deactiveUser);
+router.post('/deactivate', AdminCtrl.isAdmin,AdminCtrl.deactivateUser);
+router.post('/activate', AdminCtrl.isAdmin, AdminCtrl.activateUser)
 
 router.get('/getRentals', AdminCtrl.isAdmin,RentalCtrl.getRentals);
 router.get('/getPendingRentals', AdminCtrl.isAdmin, RentalCtrl.getPendingRentals);

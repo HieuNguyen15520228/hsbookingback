@@ -46,7 +46,7 @@ const userSchema = new Schema({
   resetPasswordToken: { type: String, default:undefined},
   resetPasswordExpires: { type: String, default:undefined},
   image: { type: String, default: 'https://res.cloudinary.com/hsuit/image/upload/q_auto:low/v1553620808/default.png'},
-  oldImages : [String],
+  oldImages : [{type:String}],
   revenue: Number,
   rentals: [{type: Schema.Types.ObjectId, ref: 'Rental'}],
   bookings: [{ type: Schema.Types.ObjectId, ref: 'Booking' }],

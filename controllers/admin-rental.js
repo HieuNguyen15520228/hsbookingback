@@ -177,6 +177,22 @@ exports.approveRental = (req,res) => {
   })
 }
 
-exports.deleteRental = (req, res) => {
-  
+exports.forbidRental = (req, res) => {
+    const rental = req.body.rentalId;
+    Rental.findByIdAndUpdate(rental,{'status':'forbid'},{new: true},(err,rental)=>{
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(rental){
+      Rental.find({ $or:[ {'status':undefined}, {'status':'pending'}]})
+      .populate('user','image username _id')
+      .exec((err,rentals)=>{
+        if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        if(rentals)
+          return res.status(200).json(rentals)
+      })
+    }
+    if(!rental)
+      return res.status(401).send({detail: `Không tồn tại hoặc đã được duyệt` });
+  })
 }

@@ -166,24 +166,24 @@ exports.updateRental =(req, res) => {
         } 
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;
-        const change = image.map(i => {
-            if (i.includes(',')) {
-                // const base64 = (i.split(','))[1]
-                return cloudinary.uploader.upload(i)
-                    .then(result =>
-                        image[image.indexOf(i)] = result.url.slice(0, 45) + "q_auto:low/" + result.url.slice(45)
-                    )
+//         const change = image.map(i => {
+//             if (i.includes(',')) {
+//                 // const base64 = (i.split(','))[1]
+//                 return cloudinary.uploader.upload(i)
+//                     .then(result =>
+//                         image[image.indexOf(i)] = result.url.slice(0, 45) + "q_auto:low/" + result.url.slice(45)
+//                     )
 
-            }
-        })
-        Promise.all(change).then(() => {
-            Object.assign(req.body, image);
+//             }
+//         })
+        // Promise.all(change).then(() => {
+            // Object.assign(req.body, image);
             const data = {title, city, address, category, bedrooms, bathrooms, 
                 description, price, people, isTv, isWifi,
                 isElevator, isWashing, isFridge, isConditioner, image}
             Rental.findByIdAndUpdate({ _id: req.body._id }, data, { new: true }, (err, rental) => {
                 res.json(rental)
             })
-        })
+        // })
     })
 }

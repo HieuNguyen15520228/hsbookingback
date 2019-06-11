@@ -55,17 +55,18 @@ router.patch('/:id', UserCtrl.authMiddleware, function (req, res) {
 router.delete('/:id', UserCtrl.authMiddleware, RentalCtrl.deleteRental );
 
 router.post('/create', UserCtrl.authMiddleware, multerUpload.multerUploads2, RentalCtrl.createRental )
-router.get('', function (req, res) {
-    const city = req.query.city;
-    const query = city ? { city: city.toLowerCase() } : {};
-    Rental.find(query)
-        .select('-bookings')
-        .exec(function (err, foundRentals) {
-
-            if (err) {
-                return res.status(422).send({ errors: normalizeErrors(err.errors) });
-            }
-            if (city && foundRentals.length === 0) {
+router.get('',  (req, res) => {
+  const city = req.query.city;
+  const query = city ? { city: city.toLowerCase() } : {};
+  Rental.find(query)
+  .where({status:'approved'})
+  .sort({createdAt: -1})
+    .select('-bookings')
+    .exec((err, foundRentals) => {
+    if (err) {
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    }
+    if (city && foundRentals.length === 0) {
                 return res.status(422).send({ errors: { title: 'No Rentals Found!', detail: `There are no rentals for city ${city}` } });
             }
             return res.json(foundRentals);

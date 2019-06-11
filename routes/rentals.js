@@ -61,7 +61,8 @@ router.get('',  (req, res) => {
   Rental.find(query)
   .where({status:'approved'})
   .sort({createdAt: -1})
-    .select('-bookings')
+  .populate('user','image _id username')
+  .select('-bookings')
     .exec((err, foundRentals) => {
     if (err) {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });

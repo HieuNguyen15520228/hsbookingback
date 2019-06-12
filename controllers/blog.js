@@ -34,13 +34,12 @@ exports.getBlog = (req,res) => {
 }
 exports.getBlogById = (req, res) => {
   const blogId = req.body.blogId;
-  Blog.findById(blogId)
+  Blog.findByIdAndUpdate(blogId,{ $inc: { viewCount: 1 }})
   .populate('author','image username _id')
   .exec((err,blog) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(blog){
-      Blog.update({_id:blogId},{{ $inc: { views: 1 }})
       return res.status(200).json(blog)
     }
     if(!blog)

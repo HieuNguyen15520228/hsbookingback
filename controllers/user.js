@@ -390,6 +390,7 @@ exports.removeBookmark = (req,res) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
           }})
+        User.findById()
         return res.status(200).json({"bookmark": user.bookmark});  
       }});
 }

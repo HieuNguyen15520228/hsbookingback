@@ -39,8 +39,10 @@ exports.getBlogById = (req, res) => {
   .exec((err,blog) => {
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(blog)
+    if(blog){
+      Blog.update({_id:blogId},{{ $inc: { views: 1 }})
       return res.status(200).json(blog)
+    }
     if(!blog)
       return res.status(404).json({detail: "Không tìm thấy bài blog"})
   })

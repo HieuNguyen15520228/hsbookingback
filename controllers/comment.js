@@ -16,14 +16,14 @@ exports.postComment = (req,res) => {
   const comment = req.body.comment;
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
-  Comment.find({rental:rental, user:user},(err,cmt)=>{
-    console.log(cmt.length)
+  Comment.find({rental:rental, user:user},(err,cmts)=>{
+  console.log(cmts.length)
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(cmt.length > 0){
-      
-      return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });}
-    if(cmt.length === 0)
+    if(cmts.length > 0){
+      return res.status(403).send({ detail: 'Bạn không thể đánh giá nữa' } );
+    }
+    if(cmts.length === 0)
       {
         console.log('here')
         Comment.create(cmt, (err, cmt) => {

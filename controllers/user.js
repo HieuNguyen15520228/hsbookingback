@@ -39,7 +39,9 @@ exports.changeAvatar = (req, res) => {
   let { _id, email,image, oldImages } = user;
   oldImages.unshift(image)
   const {avatar} = req.body;
-  User.findOneAndUpdate({ email }, { oldImages, image: avatar }, { new: true }, (err, user) => {
+  User.findOneAndUpdate({ email }, { oldImages, image: avatar }, { new: true })
+  .populate('bookmark','title address price rating _id image')
+  .exec((err, user) => {
     if (err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(!user)
@@ -55,7 +57,10 @@ exports.oldAvatar = (req, res) => {
   oldImages.remove(req.body.src);
   oldImages.push(user.image);
   image = req.body.src
-  User.findOneAndUpdate({ email }, { oldImages, image }, { new: true }, (err, user) => {
+  User.findOneAndUpdate({ email }, { oldImages, image }, { new: true })
+  .populate('bookmark','title address price rating _id image')
+
+    .exec((err, user) => {
     if (err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if (user)
@@ -351,7 +356,7 @@ exports.confirmation = (req,res) =>{
           return res.status(422).send({ errors: normalizeErrors(err.errors) });    
     if(!user)
       return res.status(404).send({ detail: 'Token không hợp lệ hoặc tài khoản đã được xác nhận' });
-    return res.status(200).send({result :{status:"OK",detail:"Đã xác nhận tài khoản thành công"}})
+    return res.status(200).send({status:"OK",detail:"Đã xác nhận tài khoản thành công"})
   })
 }
 exports.addBookmark = (req,res) => {

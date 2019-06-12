@@ -278,7 +278,9 @@ exports.authMiddleware = (req, res, next) => {
   if (token) {
     const user = parseToken(token);
 
-    User.findById(user.userId, (err, user) => {
+    User.findById(user.userId)
+    .populate('bookmark','title address price rating _id image')
+    .exec((err, user) => {
       if (err) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
       }
@@ -390,7 +392,7 @@ exports.removeBookmark = (req,res) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
           }})
-        User.findById()
+        
         return res.status(200).json({"bookmark": user.bookmark});  
       }});
 }

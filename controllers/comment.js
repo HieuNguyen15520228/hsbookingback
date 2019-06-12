@@ -12,6 +12,13 @@ const { normalizeErrors } = require('../helpers/mongoose');
 exports.postComment = (req,res) => {
   const user = res.locals.user._id;
   const rental = req.body.rentalId;
+  Rental.findById(rental)
+  .exec((err, rental) =>{
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(!rental)
+      return res.status(404).send({detail:"Không tồn tại nơi này"})
+  })
   const comment = req.body.comment;
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});

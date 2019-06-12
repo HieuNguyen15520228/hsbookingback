@@ -139,12 +139,25 @@ exports.getBookingsById = (req, res) => {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
       }
       if (!foundBookings)
-        return res.status(422).send({ errors: { title: 'Invalid Booking!', detail: 'Hóa đơn không tồn tại!' }});
+        return res.status(422).send({title: 'Invalid Booking!', detail: 'Hóa đơn không tồn tại!' });
       if (foundBookings) {
-        console.log(foundBookings);
         return res.json(foundBookings);
       }
     });
+}
+exports.getCustomerBookings = (req,res) => {
+  const user= res.locals.user;
+  Booking.find({'owner':user._id})
+  .exec((err, foundBookings) => {
+    if (err) {
+        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+      }
+      if (!foundBookings)
+        return res.status(422).send({title: 'Invalid Booking!', detail: 'Hóa đơn không tồn tại!' });
+      if (foundBookings) {
+        return res.json(foundBookings);
+      }
+  })
 }
 // exports.getOldBookings = (req, res) => {
 //   const user = res.locals.user;

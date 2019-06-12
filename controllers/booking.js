@@ -16,7 +16,7 @@ exports.createBooking = (req, res) => {
   var d2 = new Date(endAt)// some date
   var timeDiff = (d2.getTime() - d1.getTime());
   if(timeDiff <= 0)
-    return res.status(422).send({ errors: { title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ' } });
+    return res.status(422).send({ title: 'Thời gian không hợp lệ!', detail: 'Thời gian đặt phòng không hợp lệ'});
   const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
   const totalPrice = price * days;
   const booking = new Booking({ startAt, endAt, totalPrice, guests, days });
@@ -30,7 +30,7 @@ exports.createBooking = (req, res) => {
       }
       if (foundRental.user != null) {
         if (foundRental.user.id === user._id) {
-          return res.status(422).send({ errors: { title: 'Người dùng không hợp lệ!', detail: 'Không thể đặt phòng cho địa điểm bạn tạo!' } });
+          return res.status(422).send({ title: 'Người dùng không hợp lệ!', detail: 'Không thể đặt phòng cho địa điểm bạn tạo!'  });
         }
       }
       // const wait =  User.findById(user._id)
@@ -76,7 +76,7 @@ exports.createBooking = (req, res) => {
         //   return res.status(422).send({ errors: [{ title: 'Payment Error', detail: err }] });
         // }
       } else {
-        return res.status(422).send({ errors: { title: 'Đặt phòng không hợp lệ!', detail: 'Ngày bạn chọn đã được đặt!' } });
+        return res.status(422).send({ title: 'Đặt phòng không hợp lệ!', detail: 'Ngày bạn chọn đã được đặt!' });
       }
     })
 }

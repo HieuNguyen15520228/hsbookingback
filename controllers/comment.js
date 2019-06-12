@@ -12,51 +12,55 @@ const { normalizeErrors } = require('../helpers/mongoose');
 exports.postComment = (req,res) => {
   const user = res.locals.user._id;
   const rental = req.body.rentalId;
-  Rental.findById(rental)
-  .exec((err, rental) =>{
-    if(err)
-      return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(!rental)
-      return res.status(404).send({detail:"Không tồn tại nơi này"})
-  })
+  
   const comment = req.body.comment;
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
-  // Comment.find({rental:rental, user:user},(err,cmt)=>{
-  //   if(err)
-  //     return res.status(422).send({ errors: normalizeErrors(err.errors) });
-  //   if(cmt.length > 0)
-  //     return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });
-    // if(!cmt)
-    //   {
-        Comment.create(cmt, (err, cmt) => {
+  Comment.find({rental:rental, user:user},(err,cmt)=>{
+    console.log(cmt.length)
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
-    if(cmt)
-    {
-      Comment
-        .aggregate([{$match: {rental:ObjectId(rental)}},
-                    {
-          $group: {_id: rental,avgRating: {$avg: "$rating"}}
+    if(cmt.length > 0){
+      
+      return res.status(403).send({ errors: { title: 'Không được phép đánh giá!', detail: 'Bạn không thể đánh giá nữa' } });}
+    if(cmt.length === 0)
+      {
+        console.log('here')
+        Comment.create(cmt, (err, cmt) => {
+        if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        if(cmt)
+        {
+          Comment
+            .aggregate([{$match: {rental:ObjectId(rental)}},
+                        {
+              $group: {_id: rental,avgRating: {$avg: "$rating"}}
+            }
+                       ])
+            .exec((err,result) => 
+                  Rental.findByIdAndUpdate({_id:rental},{rating:result[0].avgRating},{new:true},(err,rental)=>{
+            if(err) throw err;
+          })
+                 );
+          return res.status(200).json(cmt);
         }
-                   ])
-        .exec((err,result) => 
-              Rental.findByIdAndUpdate({_id:rental},{rating:result[0].avgRating},{new:true},(err,rental)=>{
-        if(err) throw err;
-      })
-             );
-      return res.status(200).json(cmt);
-    }
   })
-      // }
-  // })
+      }
+  })
   
 }
 exports.getComment = (req,res) =>{
   const limit = req.body.limit;
   const page = req.body.page;
   const rentalId = req.body.rentalId;
-  Comment.find({rental:rentalId})
+  console.log(rentalId)
+  Rental.findById(rentalId)
+  .exec((err, rental) =>{
+    // if(err)
+    //   return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(err | !rental)
+      return res.status(404).send({detail:"Không tồn tại nơi này"})
+    Comment.find({rental:rentalId})
   .sort('-createdAt')
   .populate('user','username image _id')
   .skip(limit*(page - 1))
@@ -67,4 +71,6 @@ exports.getComment = (req,res) =>{
     if(comment)
       return res.status(200).json(comment);
   })
+  })
+  
 }

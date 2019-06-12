@@ -148,6 +148,7 @@ exports.getBookingsById = (req, res) => {
 exports.getCustomerBookings = (req,res) => {
   const user= res.locals.user;
   Booking.find({'owner':user._id})
+  .populate('user','image username _id')
   .exec((err, foundBookings) => {
     if (err) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });

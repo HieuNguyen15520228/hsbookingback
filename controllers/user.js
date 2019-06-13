@@ -234,6 +234,8 @@ exports.sendMailToken = (req, res, next) => {
         if (!user) {
           return res.status(422).send({ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại'});
         }
+        if(user.resetPasswordExpires!=undefined && user.resetPasswordExpires > Date.now())
+          return res.status(403).send({detail:'Đã có email gửi tới bạn. Xin hãy kiểm tra lại.'})
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 

@@ -72,5 +72,8 @@ exports.getComment = (req,res) =>{
       return res.status(200).json(comment);
   })
   })
+}
+exports.removeOneComment = (req, res) =>{
+  const user = res.locals.user;
   
 }

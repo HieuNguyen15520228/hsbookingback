@@ -28,11 +28,11 @@ router.get('/search/top', RentalCtrl.getTopRentals);
 router.patch('/:id', UserCtrl.authMiddleware, function (req, res) {
     const rentalData = req.body;
     const user = res.locals.user;
-
-    Rental
-        .findById(req.params.id)
-        .populate('user')
-        .exec(function (err, foundRental) {
+  Rental
+    .findById(req.params.id)
+    .populate('booking','startAt endAt')
+    .populate('user')
+    .exec(function (err, foundRental) {
 
             if (err) {
                 return res.status(422).send({ errors: normalizeErrors(err.errors) });

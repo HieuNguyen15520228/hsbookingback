@@ -75,5 +75,5 @@ exports.getComment = (req,res) =>{
 }
 exports.removeOneComment = (req, res) =>{
   const user = res.locals.user;
-  
+  Comment.find
 }

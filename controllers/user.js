@@ -159,8 +159,10 @@ exports.register = (req, res) => {
           +url+"/confirm/" + registerToken + '\n\n'       
       };
       smtpTransport.sendMail(mailOptions, (err) => {
-        if (err) 
+        if (err){
+          console.log(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
+        }
         return res.status(200).send({ result: { status: 'OK', detail:"Đăng ký thành công"}});
       });
         

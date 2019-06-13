@@ -17,7 +17,6 @@ exports.postComment = (req,res) => {
   const rating = req.body.rating;
   const cmt =  new Comment ({user,rental,comment,rating});
   Comment.find({rental:rental, user:user},(err,cmts)=>{
-  console.log(cmts.length)
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(cmts.length > 0){
@@ -25,7 +24,6 @@ exports.postComment = (req,res) => {
     }
     if(cmts.length === 0)
       {
-        console.log('here')
         Comment.create(cmt, (err, cmt) => {
         if(err)
           return res.status(422).send({ errors: normalizeErrors(err.errors) });

@@ -153,7 +153,7 @@ exports.register = (req, res) => {
       });
       var mailOptions = {
         to: user.email,
-        from: 'registerconfirm@uitbooking.demo.com',
+        from: 'registerconfirm@uitbooking.com',
         subject: 'Account Verification Token',
         text: 'Please verify your account by clicking the link:\n\n'
           +url+"/confirm/" + registerToken + '\n\n'       
@@ -235,8 +235,8 @@ exports.sendMailToken = (req, res, next) => {
         if (!user) {
           return res.status(422).send({ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại'});
         }
-        // if(user.resetPasswordExpires!=undefined && user.resetPasswordExpires > Date.now())
-        //   return res.status(403).send({detail:'Đã có email gửi tới bạn. Xin hãy kiểm tra lại.'})
+        if(user.resetPasswordExpires!=undefined && user.resetPasswordExpires > Date.now())
+          return res.status(403).send({detail:'Đã có email gửi tới bạn. Xin hãy kiểm tra lại.'})
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
@@ -268,12 +268,11 @@ exports.sendMailToken = (req, res, next) => {
           +url+'/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
-      console.log(mailOptions.text)
-      // smtpTransport.sendMail(mailOptions, (err) => {
-      //   // req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
-      //   res.json({ 'sendSuccess': true });
-      //   done(err, 'done');
-      // });
+      smtpTransport.sendMail(mailOptions, (err) => {
+        // req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+        res.json({ 'sendSuccess': true });
+        done(err, 'done');
+      });
     }
   ], (err) => {
     if (err) return next(err);

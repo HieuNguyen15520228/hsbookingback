@@ -128,7 +128,7 @@ exports.isAdmin = (req, res, next) => {
         res.locals.user = user;
         next();
       } else {
-        return res.status(401).send({ errors: { title: 'Không được chứng thực!', detail: 'Ban khong phai ADMIN!' } });
+        return res.status(401).send({ title: 'Không được chứng thực!', detail: 'Bạn không phải admin!' });
 
       }
     })
@@ -142,7 +142,7 @@ function parseToken(token) {
 }
 
 function notAuthorized(res) {
-  return res.status(401).send({ errors: { title: 'Không được chứng thực!', detail: 'Bạn cần phải đăng nhập!' } });
+  return res.status(401).send({ title: 'Không được chứng thực!', detail: 'Bạn cần phải đăng nhập!'  });
 }
 
 exports.updateInfo = (req, res) => {
@@ -154,7 +154,7 @@ exports.updateInfo = (req, res) => {
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     }
     if (!user) {
-      return res.status(422).send({ errors: [{ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại' }] });
+      return res.status(422).send({ title: 'Người dùng không hợp lệ!', detail: 'Người dùng không tồn tại'  });
     }
     User.findOneAndUpdate({ _id }, data, (err, user) => {
       if (err)

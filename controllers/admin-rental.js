@@ -45,7 +45,7 @@ exports.createRental = (req, res) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (foundRental)
-            return res.status(422).send({ errors: { title: 'Rentals Found!', detail: `Tên nhà ở đã có người sử dụng` } });
+            return res.status(422).send({ title: 'Rentals Found!', detail: `Tên nhà ở đã có người sử dụng` });
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;
         const change = image.map(i => {
@@ -130,9 +130,9 @@ exports.updateRental =(req, res) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (!foundRental)
-            return res.status(422).send({ errors: [{ title: 'No Rentals Found!', detail: `Không tồn tại nơi ở này` }] });
+            return res.status(422).send({ title: 'No Rentals Found!', detail: `Không tồn tại nơi ở này`  });
         if (String(foundRental.user) !== String(user._id)) {
-            return res.status(422).send({ errors: [{ title: 'Không có quyền!', detail: `Bạn không có quyền chỉnh sửa` }] });
+            return res.status(422).send({ title: 'Không có quyền!', detail: `Bạn không có quyền chỉnh sửa`  });
         } 
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;

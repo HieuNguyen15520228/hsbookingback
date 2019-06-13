@@ -90,7 +90,7 @@ exports.deleteBooking = function (req, res) {
         return res.status(422).send({ errors: normalizeErrors(err.errors) });
       }
       if (user.id !== foundBooking.user.id) {
-        return res.status(422).send({ errors: [{ title: 'Invalid User!', detail: 'You are not booking owner!' }] });
+        return res.status(403).send({ title: 'Invalid User!', detail: 'Bạn không có quyền xóa!' });
       }
 
       foundBooking.remove(function (err) {

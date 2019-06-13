@@ -56,7 +56,7 @@ exports.addSearchHistory = (req, res) => {
         .exec(function (err, foundRental) {
 
             if (err || !foundRental) {
-                return res.status(422).send({ errors: [{ title: 'Rental Error!', detail: 'Could not find Rental!' }] });
+                return res.status(422).send({ title: 'Rental Error!', detail: 'Không tồn tại nơi ở!' });
             }
             if(user){
               const searchHistory = user.searchHistory;
@@ -82,7 +82,7 @@ exports.createRental = (req, res) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (foundRental)
-            return res.status(422).send({ errors: { title: 'Rentals Found!', detail: `Tên nhà ở đã có người sử dụng` } });
+            return res.status(422).send({ title: 'Rentals Found!', detail: `Tên nhà ở đã có người sử dụng` } );
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;
 
@@ -125,11 +125,11 @@ exports.deleteRental = (req, res) => {
             }
 
             if (user.id !== foundRental.user.id) {
-                return res.status(422).send({ errors: { title: 'Invalid User!', detail: 'You are not rental owner!' }});
+                return res.status(422).send({ title: 'Invalid User!', detail: 'Bạn không phải là chủ nhà' });
             }
 
             if (foundRental.bookings.length > 0) {
-                return res.status(422).send({ errors: { title: 'Active Bookings!', detail: 'Không thể xóa nơi ở này' } });
+                return res.status(422).send({ title: 'Active Bookings!', detail: 'Không thể xóa nơi ở này'  });
             }
 
             foundRental.remove(function (err) {
@@ -160,9 +160,9 @@ exports.updateRental =(req, res) => {
         if (err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         if (!foundRental)
-            return res.status(422).send({ errors: [{ title: 'No Rentals Found!', detail: `Không tồn tại nơi ở này` }] });
+            return res.status(404).send({  title: 'No Rentals Found!', detail: `Không tồn tại nơi ở này`  });
         if (String(foundRental.user) !== String(user._id)) {
-            return res.status(422).send({ errors: [{ title: 'Không có quyền!', detail: `Bạn không có quyền chỉnh sửa` }] });
+            return res.status(422).send({ title: 'Không có quyền!', detail: `Bạn không có quyền chỉnh sửa` });
         } 
         const { title, city, address, category, bedrooms, bathrooms, description, price, people, isTv, isWifi,
             isElevator, isWashing, isFridge, isConditioner, image } = req.body;

@@ -75,5 +75,17 @@ exports.getComment = (req,res) =>{
 }
 exports.removeOneComment = (req, res) =>{
   const user = res.locals.user;
-  Comment.find
+  const cmtId = req.params.id;
+  Comment.findById(cmtId)
+  .exec((err, cmt) => {
+    if(err || ! cmt)
+      return res.status(404).send({detail:"Không tồn tại đánh giá"})
+    if(cmt)
+    {
+      cmt.remove(err =>{
+        return res.status(422).send({ errors: normalizeErrors(err.errors) });        
+      })
+      return res.status(200).send({detail:'Xóa đánh giá thành công'})
+    }
+  })
 }

@@ -104,6 +104,7 @@ exports.auth = (req, res) => {
 
 
 exports.register = (req, res) => {
+  console.log(req.headers)
   const { username, email, password, passwordConfirmation } = req.body;
   if (!password || !email) {
     return res.status(400).send({  status: 'Error', detail: 'Điền đầy đủ thông tin!' });

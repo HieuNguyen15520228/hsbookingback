@@ -156,7 +156,7 @@ exports.register = (req, res) => {
         from: 'registerconfirm@uitbooking.demo.com',
         subject: 'Account Verification Token',
         text: 'Please verify your account by clicking the link:\n\n' +
-          +req.headers.origin+"/confirm/" + registerToken + '\n\n'       
+          +req.get('origin')+"/confirm/" + registerToken + '\n\n'       
       };
       smtpTransport.sendMail(mailOptions, (err) => {
         if (err) 
@@ -179,7 +179,6 @@ exports.changePass = (req, res) => {
     if (!user) {
       return res.status(422).send({ detail: 'Người dùng không tồn tại' });
     }
-    console.log(user)
     if (user.hasSamePassword(password)) {
       user.password = newPassword;
       user.save((err) => {
@@ -263,7 +262,7 @@ exports.sendMailToken = (req, res, next) => {
         subject: 'UIT Booking Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          +req.headers.origin+'/reset/' + token + '\n\n' +
+          +req.get('origin')+'/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       smtpTransport.sendMail(mailOptions, (err) => {
@@ -393,7 +392,6 @@ exports.removeBookmark = (req,res) => {
         if(rentalId)
         bookmark.remove(rentalId)
         user.bookmark = bookmark;
-        console.log(user.bookmark)
         user.save((err) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });

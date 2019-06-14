@@ -7,6 +7,7 @@ const CommentCtrl = require('../controllers/comment');
 router.post("/post", UserCtrl.authMiddleware, CommentCtrl.postComment)
 router.post("/get", CommentCtrl.getComment);
 router.delete("/:id", CommentCtrl.removeOneComment)
+router.post('/createContact',)
 module.exports = router;
 
 

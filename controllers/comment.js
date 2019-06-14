@@ -5,7 +5,9 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const Rental = require('../models/rental');
 const User = require('../models/user');
-const Comment = require('../models/comment')
+const Comment = require('../models/comment');
+const Contact = require('../models/contact');
+
 const _ = require('lodash')
 const { normalizeErrors } = require('../helpers/mongoose');
 
@@ -85,5 +87,15 @@ exports.removeOneComment = (req, res) =>{
       })
       return res.status(200).send({detail:'Xóa đánh giá thành công'})
     }
+  })
+}
+exports.createContact = (req, res) => {
+  const { name, email, message} = req.body;
+  const contact = new Contact({name, email, message})
+  Contact.create(contact, (err,ctc) => {
+    if(err ||!ctc)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });
+    if(ctc)
+      return res.status(200).send({detail:'Cam on su gop y cua ban!'})
   })
 }

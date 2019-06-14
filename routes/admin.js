@@ -13,9 +13,10 @@ router.post('/activate', AdminCtrl.isAdmin, AdminCtrl.activateUser)
 
 router.get('/getRentals', AdminCtrl.isAdmin,RentalCtrl.getRentals);
 router.get('/getPendingRentals', AdminCtrl.isAdmin, RentalCtrl.getPendingRentals);
+router.get('/getForbidRentals', AdminCtrl.isAdmin, RentalCtrl.getForbidRentals);
 router.post('/approveRental', AdminCtrl.isAdmin, RentalCtrl.approveRental);
 router.post('/forbidRental', AdminCtrl.isAdmin, RentalCtrl.forbidRental);
 router.get('/getNumbers', AdminCtrl.isAdmin, AdminCtrl.getNumbers);
 
-router.get('/getPendingBlogs', AdminCtrl.isAdmin, BlogCtrl.getPedingBlogs)
+router.get('/getPendingBlogs', AdminCtrl.isAdmin, BlogCtrl.getPedingBlogs);
 module.exports = router;

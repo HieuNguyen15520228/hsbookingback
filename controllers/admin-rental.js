@@ -199,3 +199,15 @@ exports.forbidRental = (req, res) => {
       return res.status(401).send({detail: `Không tồn tại hoặc đã được duyệt` });
   })
 }
+exports.getForbidRentals = (req,res) => {
+  Rental
+        .find({'status':'forbid'})
+        .sort({createdAt: -1})
+        .populate('user','image username')
+        .exec((err, foundRentals) => {
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+            return res.status(200).json(foundRentals);
+        });
+}

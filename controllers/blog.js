@@ -49,6 +49,7 @@ exports.getBlogById = (req, res) => {
 
 exports.getPedingBlogs = (req,res) => {
   Blog.find({status:'pending'})
+  .sort({createdAt: -1})
   .populate('author','image _id user')
   .exec((err,blog) => {
     if(err)

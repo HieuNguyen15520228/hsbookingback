@@ -35,14 +35,6 @@ const rentalRoutes = require('./routes/rentals'),
         });
       };
       connectWithRetry();
-      // mongoose.connect();
-// mongoose.connect(config.DB_URI).then(() => {
-//   if (process.env.NODE_ENV !== 'production') {
-//     const fakeDb = new FakeDb();
-//     fakeDb.seedDb();
-//   }
-// });
-
 const app = express();
 
 app.use('/uploads', express.static('uploads'));

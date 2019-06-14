@@ -61,6 +61,7 @@ exports.createBooking = (req, res) => {
           User.update({ _id: user._id }, { $push: { bookings: booking } }, function () { });
           Booking
             .where({ user })
+            .sort({createdAt: -1})
             .populate('owner', 'image username _id')
             .populate('rental')
             .exec(function (err, foundBookings) {
@@ -69,7 +70,6 @@ exports.createBooking = (req, res) => {
               }
               return res.json(foundBookings);
             });
-
         });
         // } else {
 
@@ -99,6 +99,7 @@ exports.deleteBooking = function (req, res) {
         }
         Booking
           .where({ user })
+          .sort({createdAt: -1})
           .populate('owner')
           .populate('rental')
           .exec(function (err, foundBookings) {
@@ -115,6 +116,7 @@ exports.getUserBookings = function (req, res) {
   const user = res.locals.user;
   Booking
     .where({ user })
+    .sort({createdAt: -1})
     .populate('owner', 'image username _id')
     .populate('rental')
     .exec(function (err, foundBookings) {

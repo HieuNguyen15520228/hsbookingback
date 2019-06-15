@@ -21,5 +21,5 @@ router.get('/getNumbers', AdminCtrl.isAdmin, AdminCtrl.getNumbers);
 router.get('/getPendingBlogs', AdminCtrl.isAdmin, BlogCtrl.getPedingBlogs);
 router.post('/approveBlog', AdminCtrl.isAdmin, BlogCtrl.approveBlog);
 
-
+router.get('/getContact', AdminCtrl.isAdmin, AdminCtrl.getContact)
 module.exports = router;

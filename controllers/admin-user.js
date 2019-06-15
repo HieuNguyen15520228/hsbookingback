@@ -3,7 +3,7 @@ const Rental = require('../models/rental');
 const Booking = require('../models/booking');
 const Comment = require('../models/comment');
 const Payment = require('../models/payment');
-
+const Contact = require('../models/contact');
 const { normalizeErrors } = require('../helpers/mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('../config/prod');
@@ -176,3 +176,13 @@ exports.getNumbers = (req, res) => {
 return Promise.all(countPromises).then(() => res.json(result))
 }
 
+exports.getContact = (req, res) => {
+  Contact.find({})
+  .sort({createdAt: -1})
+  .exec((err, ctc) => {
+    if(err)
+      return res.status(422).send({ errors: normalizeErrors(err.errors) });      
+    if(ctc)
+      return res.status(200).json(ctc);
+  })
+}

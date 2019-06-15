@@ -42,7 +42,11 @@ exports.postComment = (req,res) => {
             if(err) throw err;
           })
                  );
-          return res.status(200).json(cmt);
+          Comment.findById(cmt._id)
+          .populate('user','username image _id')
+          .exec((err,foundCmt) =>{
+            return res.status(200).json(foundCmt);  
+          })
         }
   })
       }

@@ -100,7 +100,6 @@ exports.createRental = (req, res) => {
 				console.log(err)
 				return res.status(422).send({ errors: normalizeErrors(err.errors) });
 			}
-			console.log(user)
 			User.update({ _id: user }, { $push: { rentals: newRental } }, function () { });
 			return res.json(newRental);
 		});

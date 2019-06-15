@@ -53,7 +53,6 @@ exports.getComment = (req,res) =>{
   const limit = req.body.limit;
   const page = req.body.page;
   const rentalId = req.body.rentalId;
-  console.log(rentalId)
   Rental.findById(rentalId)
   .exec((err, rental) =>{
     // if(err)

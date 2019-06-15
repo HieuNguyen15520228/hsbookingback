@@ -28,7 +28,6 @@ exports.getPendingPayments = function (req, res) {
         })
 }
 exports.createPayment = (req, res) => {
-    console.log(req.body);
     const user = res.locals.user;
     const { toUser, booking, totalPrice, payerID, paymentID, paymentToken } = req.body;
     const fromUser = user._id;

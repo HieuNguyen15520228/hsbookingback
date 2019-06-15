@@ -109,7 +109,6 @@ exports.approveRental = (req,res) => {
 
 exports.forbidRental = (req, res) => {
     const rental = req.body.rentalId;
-  console.log(rental)
     Rental.findByIdAndUpdate(rental,{'status':'forbid'},{new: true},(err,rental)=>{
     if(err)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });

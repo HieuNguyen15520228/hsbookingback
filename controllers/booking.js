@@ -180,10 +180,7 @@ function isValidBooking(proposedBooking, rental) {
   let isValid = true;
 
   if (rental.bookings && rental.bookings.length > 0) {
-    console.log(proposedBooking.startAt, " ", proposedBooking.endAt);
-
     isValid = rental.bookings.every(function (booking) {
-      console.log(rental.bookings.startAt, " ", rental.bookings.endAt)
       const proposedStart = moment(proposedBooking.startAt);
       const proposedEnd = moment(proposedBooking.endAt);
 
@@ -210,6 +207,5 @@ function isValidUserBook(proposedBooking, user) {
       return ((actualStart < proposedStart && actualEnd < proposedStart) || (proposedEnd < actualEnd && proposedEnd < actualStart));
     });
   }
-  console.log("isValid " + isValid);
   return isValid;
 }

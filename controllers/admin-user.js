@@ -40,7 +40,6 @@ exports.getAllUser = (req, res) => {
         if (err) {
           return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
-      console.log(foundUser)
         return res.status(200).json(foundUser);
       })
   

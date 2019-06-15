@@ -86,7 +86,8 @@ exports.removeOneComment = (req, res) =>{
     if(cmt)
     {
       cmt.remove(err =>{
-        return res.status(422).send({ errors: normalizeErrors(err.errors) });        
+        if(err)
+          return res.status(422).send({ errors: normalizeErrors(err.errors) });        
       })
       return res.status(200).send({detail:'Xóa đánh giá thành công'})
     }

@@ -371,20 +371,15 @@ exports.addBookmark = (req,res) => {
         const bookmark = user.bookmark;
         if(rentalId)
         bookmark.unshift(rentalId)
-        user.bookmark = bookmark;
-        user.save((err) => {
-          if (err) {
-            return res.status(422).send({ errors: normalizeErrors(err.errors) });
-          }})
-        User.findById(user._id)
+        User.findByIdAndUpdate(user._id,{bookmark:bookmark},{new:true})
         .populate('bookmark','title address price rating _id image')
         .exec((err,foundUser)=>{
+          console.log(foundUser.bookmark[0])
           if(err)
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
           if(foundUser)
-            console.log(foundUser.bookmark)
-        })
-        return res.status(200).json({"bookmark": user.bookmark});  
+            return res.status(200).json({"bookmark": foundUser.bookmark});          })
+        
       }});
 }
 exports.removeBookmark = (req,res) => {

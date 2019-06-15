@@ -376,6 +376,14 @@ exports.addBookmark = (req,res) => {
           if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
           }})
+        User.findById(user._id)
+        .populate('bookmark','title address price rating _id image')
+        .exec((err,foundUser)=>{
+          if(err)
+            return res.status(422).send({ errors: normalizeErrors(err.errors) });
+          if(foundUser)
+            console.log(foundUser.bookmark)
+        })
         return res.status(200).json({"bookmark": user.bookmark});  
       }});
 }

@@ -5,17 +5,8 @@ const config = require('./config');
 const Rental = require('./models/rental');
 const path = require('path');
 const dotenv = require('dotenv');
-const cloudinary = require('cloudinary');
 
 dotenv.config();
-const cloudinaryConfig = (req, res, next) => {
-    cloudinary.config({
-        cloud_name: 'hsuit',
-        api_key: '126822664667284',
-        api_secret: 'c4PmU_ayn3KRXaCOdTi9tr8d-04',
-    });
-    next();
-}
 
 // Serve the Parse API on the /parse URL prefix
 const rentalRoutes = require('./routes/rentals'),
@@ -24,10 +15,9 @@ const rentalRoutes = require('./routes/rentals'),
       paymentRoutes = require('./routes/payments'),
       commentRoutes = require('./routes/comments'),
       adminRoutes = require('./routes/admin'),
-      blogRoutes = require('./routes/blog'),
-      imageUploadRoutes = require('./routes/image-upload');
+      blogRoutes = require('./routes/blog');
       var connectWithRetry = function() {
-        return mongoose.connect('mongodb://nhat123:nhat123@ds147225.mlab.com:47225/rentaluit', function(err) {
+        return mongoose.connect(process.env.DATABASE_URL, function(err) {
           if (err) {
             console.log('Kết nối tới database thất bại - Đang thử lại');
             setTimeout(connectWithRetry, 1000);
@@ -53,7 +43,6 @@ app.use((req, res, next) => {
   next();
 });
 app.get('/', (req, res) => res.send('Hello World!') ); 
-app.use('*', cloudinaryConfig);
 app.use('/api/v1/rentals', rentalRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
@@ -61,9 +50,6 @@ app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/comments', commentRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/blog', blogRoutes);
-
-app.use('/api/v1', imageUploadRoutes);
-
 
 if (process.env.NODE_ENV === 'production') {
   const appPath = path.join(__dirname, '..', 'dist');

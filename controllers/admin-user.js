@@ -11,11 +11,8 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 //16/03
-const upload = require('../services/image-upload');
-const singleUpload = upload.single('image');
 //26/03
-const cloudinary = require('cloudinary')
-const multerUpload = require('../services/multerUpload')
+
 
 
 exports.getUser = (req, res) => {

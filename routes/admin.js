@@ -20,4 +20,6 @@ router.get('/getNumbers', AdminCtrl.isAdmin, AdminCtrl.getNumbers);
 
 router.get('/getPendingBlogs', AdminCtrl.isAdmin, BlogCtrl.getPedingBlogs);
 router.post('/approveBlog', AdminCtrl.isAdmin, BlogCtrl.approveBlog);
+
+
 module.exports = router;

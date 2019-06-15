@@ -100,6 +100,6 @@ exports.createContact = (req, res) => {
     if(err ||!ctc)
       return res.status(422).send({ errors: normalizeErrors(err.errors) });
     if(ctc)
-      return res.status(200).send({detail:'Cam on su gop y cua ban!'})
+      return res.status(200).send({detail:'Cảm ơn sự góp ý của bạn!'})
   })
 }
